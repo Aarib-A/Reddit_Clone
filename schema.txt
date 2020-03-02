@@ -1,0 +1,7 @@
+Post:
+
+Owner name | Post ID# | total score | Date | Parent Post #| child post #s| Upvotes | downvotes | Post content |
+
+
+Owener:
+Owner ID # | Owner User Name | Owner
