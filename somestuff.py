@@ -1,15 +1,42 @@
 import sqlite3
-from flask import jsonify
+from flask import jsonify, Flask
 
-conn = sqlite3.connect("otaku.db")
+app = Flask(__name__)
 
-cursor = conn.cursor()
+# conn = sqlite3.connect("otaku.db")
+
+# cursor = conn.cursor()
 
 
-for i in cursor.execute("SELECT * FROM Posts;"):
-    print(i)
-    list.append(i)
+# for i in cursor.execute("SELECT * FROM Posts;"):
+#     print(i)
+#     list.append(i)
 
-print(str(list))
+# print(str(list))
+
+
+@app.route('/')
+def default():
+    return "Hello Doe"
+
+@app.route('/u/<userid>')
+def user():
+    pass
+
+@app.route('/r/<community>')
+def community():
+    pass
+
+@app.route('/r/<community>/<post>/')
+def post():
+    pass
+
+@app.route('/r/<community>/<post>/>comment>/')
+def comment():
+    pass
+
+
+if __name__ == '__main__':
+    app.run()
 
 

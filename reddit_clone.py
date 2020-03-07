@@ -28,6 +28,12 @@ def dict_factory(cursor, row):
 
     return d
 
+@app.route('/submit', methods= ['GET', 'POST'])
+def preparing_post():
+    pass
+
+
+
 @app.route('/r/posts/<int:post_id>/comments', methods = ['GET'])
 def retrive_post_CONTENT(post_id):
     # pass
@@ -60,6 +66,27 @@ def home():
 @app.errorhandler(404)
 def page_not_found(e):
     return '''<h1>404 NOT FOUND (i think)</h1><p>{}</p>'''.format(e), 404
+
+
+
+@app.route('/u/<userid>')
+def user():
+    pass
+
+@app.route('/r/<community>/')
+def community():
+    pass
+
+@app.route('/r/<community>/posts/<post_id>/comments')
+def post():
+    pass
+
+@app.route('/r/<community>/<post_id>/comments/<comment_id>')
+def comment():
+    pass
+
+
+
 
 
 app.run()
