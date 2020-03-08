@@ -14,21 +14,24 @@ def login(): # The code is similar to https://flask.palletsprojects.com/en/1.1.x
     pass
 
 def list_dicts_factory(cursor, row):
-    list = {}
+    list = []
+    # list = {}
     # list = dictionary_obj
-    number = 0   
+    # number = 0   
     # number = start_from
     d = {}
     for index, col in enumerate(cursor.description):
         
         if col[0] in d:
-            list[number] = d
-            number += 1
-            d = {}
+            # list[number] = d
+            list.append(d)
+            # number += 1
+            # d = {}
 
         d[col[0]] = row[index]
 
-    list[number] = d
+    # list[number] = d
+    list.append(d)
 
     return list
 
@@ -40,12 +43,27 @@ def dict_factory(cursor, row):
     return d
 
 
+
 def insert_into_posts(conn, task): #https://www.sqlitetutorial.net/sqlite-python/insert/
     sql = ''' INSERT INTO Posts(Owner_ID, owner_name,post_id, post_title, post_body, upvotes, downvotes, date)
                     VALUES(?,?,?,?,?,?,?,?) ;'''
     cur = conn.cursor()
     cur.execute(sql, task)
     return cur.lastrowid
+
+@app.route('/r/post/<int:post_id>/del', methods = ["POST"])
+def killiing_post(post_id):
+    connection = sqlite3.connect("otaku.db")
+    cur = connection.cursor()
+    cur.execute("DELETE FROM Posts WHERE Posts.post_id={};".format(post_id))
+    connection.commit()
+    cur.execute("DELETE FROM comments WHERE comments.post_id={};".format(post_id))
+    connection.commit()
+    # connection.execute("DELETE FROM Posts WHERE Posts.post_id={};".format(post_id))
+    # connection.execute("DELETE FROM comments WHERE comments.post_id={};".format(post_id))
+    cur.close()
+    connection.close()
+    return redirect(url_for('home'))
 
 @app.route('/submit', methods = ['GET', 'POST'])
 def preparing_reddite_post():
@@ -72,22 +90,26 @@ def retrive_post_CONTENT(post_id):
     conn = sqlite3.connect('otaku.db')
     conn.row_factory = list_dicts_factory
     cur = conn.cursor()
-    # all_posts = cur.execute('SELECT * FROM Posts  INNER JOIN comments \
-    #     ON Posts.post_id = comments.post_id WHERE Posts.post_id = {};'.format(post_id)).fetchall()
+    # all_posts = cur.execute('SELECT * FROM Posts LEFT JOIN comments \
+    #     ON Posts.post_id = comments.post_id  WHERE Posts.post_id = {};'.format(post_id)).fetchall()
     post_content = cur.execute('SELECT * FROM Posts  \
          WHERE Posts.post_id = {};'.format(post_id)).fetchall()
     
     comments = cur.execute('SELECT * FROM comments  \
-         WHERE comments.post_id = {};'.format(post_id)).fetchall()
+         WHERE comments.post_id = {} ORDER BY date DESC;'.format(post_id)).fetchall()
     # conn.commit()
     conn.close()
 
     whole_dict ={}
-    whole_dict["post"] = post_content
-    whole_dict["comments"] = comments
-
+    # whole_dict["post"] = post_content[0]
+    # whole_dict["comments"] = comments
+    whole_dict["post"] = post_content[0]
+    whole_dict['comments'] = {}
+    for i in range(len(comments)):
+        whole_dict['comments'][i] = comments[i]
 
     return jsonify(whole_dict)
+    # return jsonify(all_posts)
     
 
 @app.route('/r/all', methods=['GET'])
