@@ -1,0 +1,18 @@
+{
+    "post_id" : 1,
+    "owner_name" : "Filthy Frank",
+    "post_title" : "Relatable",
+    "post_body" : "Darth Vader: Your feelings for her are not real.\nStarkiller: THEY ARE TO ME.",
+    "owner_id" : 9000
+}
+
+
+curl -i -X POST http://127.0.0.1:5000/post -d ' \
+> {
+>     "post_id" : 1,
+>     "comm_name" : "degenerat_weebs",
+>     "owner_name" : "Filthy Frank",
+>     "post_body" : "Darth Vader: Your feelings for her are not real.\nStarkiller: THEY ARE TO ME.",
+>     "owner_id" : 9000
+> } ' \
+> -H 'Content-Type: application/json'
