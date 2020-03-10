@@ -1,7 +1,7 @@
 {
     "post_id" : 1,
-    "owner_name" : "Filthy Frank",
-    "post_title" : "Relatable",
+    "owner_name" : "Just some guy",
+    "post_title" : "Relatable to every weeb",
     "post_body" : "Darth Vader: Your feelings for her are not real.\nStarkiller: THEY ARE TO ME.",
     "owner_id" : 9000
 }
@@ -10,9 +10,20 @@
 curl -i -X POST http://127.0.0.1:5000/post -d ' \
 > {
 >     "post_id" : 1,
->     "owner_name" : "Filthy Frank",
->     "post_title" : "Relatable",
+>     "owner_name" : "Just some guy",
+>     "post_title" : "Relatable to every weeb",
 >     "post_body" : "Darth Vader: Your feelings for her are not real.\nStarkiller: THEY ARE TO ME.",
 >     "owner_id" : 9000
 > } ' \
 > -H 'Content-Type: application/json'
+
+
+
+
+{"post_id" : 1, "owner_name" : "Just some guy", "post_title" : "Relatable to every weeb", "post_body" : "Darth Vader: Your feelings for her are not real.\nStarkiller: THEY ARE TO ME.", "owner_id" : 9000}
+
+
+
+{"list": [1200, 787]}
+
+curl -i -X POST -H "Content-Type: application/json" -d '{"list": [1200, 787]}' http://127.0.0.1:5000/sort

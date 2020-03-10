@@ -1,4 +1,4 @@
-from flask import Flask,jsonify, request, render_template, redirect, url_for
+from flask import Flask,jsonify, request, render_template, redirect, url_for, abort
 import sqlite3
 from datetime import datetime
 
@@ -13,6 +13,7 @@ def Connect_to_db(need_dicts_factory = False):
         conn.row_factory = list_dicts_factory
     cur = conn.cursor()
     return conn, cur
+
 
 def Close_db(conn, cur):
     try:
@@ -55,7 +56,6 @@ def list_dicts_factory(cursor, row):
 
     return list
 
-
 #USE this only
 def dict_factory(cursor, row):
     d = {}
@@ -64,21 +64,22 @@ def dict_factory(cursor, row):
 
     return d
 
-
 #CHANGE THE QUERY
 def insert_into_posts(conn, task): #https://www.sqlitetutorial.net/sqlite-python/insert/
     #must change the parameter feilds, they notw
     #NOW THEY ARE CHANGED
     sql = ''' INSERT INTO Posts(Owner_ID, owner_name,post_id, post_title, post_body, upvotes, downvotes, date, comm_name, karma)
-                    VALUES(?,?,?,?,?,?,?,?) ;'''
+                    VALUES(?,?,?,?,?,?,?,?, ?, ?) ;'''
     cur = conn.cursor()
     cur.execute(sql, task)
+    conn.commit()
     return cur.lastrowid
 
 @app.route('/r/post/<int:post_id>/del', methods = ["POST"])
 def killiing_post(post_id):
-    connection = sqlite3.connect("otaku.db")
-    cur = connection.cursor()
+    connection, cur =Connect_to_db()
+    # connection = sqlite3.connect("otaku.db")
+    # cur = connection.cursor()
     cur.execute("DELETE FROM Posts WHERE Posts.post_id={};".format(post_id))
     connection.commit()
     cur.execute("DELETE FROM comments WHERE comments.post_id={};".format(post_id))
@@ -94,6 +95,7 @@ def preparing_reddite_post(community):
     if request.method == 'GET':
         return render_template('submit.html')
     elif request.method == 'POST':
+        
         conn, cur = Connect_to_db()
         data = request.get_json()
         date_stamp = str(datetime.utcnow())
@@ -107,12 +109,19 @@ def preparing_reddite_post(community):
         #INCLUDE DATABASE VARIABLES IN THIS TUPLE (UPDATE, DID IT)
         # tupl = (9000, 'Filthy Frank',1200, post_title, post_body, 1, 0, date_stamp, community, 1)
         tupl = (owner_id, owner_name, post_id, post_title, post_body, 1,0, date_stamp , community, 1)
-
-        with conn:
-            row_id = insert_into_posts(conn, tupl)
+        try:
+            with conn:
+                row_id = insert_into_posts(conn, tupl)
+        except sqlite3.IntegrityError as e:
+            Close_db(conn=conn, cur=cur)
+            abort(409)
 
         Close_db(conn=conn, cur=cur)
-    return redirect(url_for('retrive_post_CONTENT', post_id = 1200))
+        # return redirect('retrive_post_CONTENT',community=community, post_id = 1200, code=201)
+        return redirect(url_for('retrive_post_CONTENT',community=community, post_id = 1200), code=201)
+        # return 0
+        # return redirect('/r/{}/posts/{}/comments'.format(community,post_id))
+        # return retrive_post_CONTENT(community=community, post_id=post_id)
 
 def vote(community, post_id, is_increment):
     conn, cur = Connect_to_db()
@@ -120,7 +129,6 @@ def vote(community, post_id, is_increment):
         cur.execute("UPDATE Posts \
                  SET upvotes = upvotes + 1 , karma = karma + 1\
                  WHERE comm_name = '{}' AND post_id = {};".format(community,post_id))
-
     else:
         cur.execute("UPDATE Posts \
                 SET downvotes = downvotes + 1 , karma = karma - 1\
@@ -132,12 +140,12 @@ def vote(community, post_id, is_increment):
 @app.route('/r/<community>/posts/<int:post_id>/karma/increment', methods = ['PUT']) #must find way to send status code '200'
 def increment_post(community, post_id): 
     vote(community=community, post_id=post_id, is_increment=True)
-    return redirect(url_for('retrive_post_CONTENT', community = community, post_id = post_id))
+    return retrive_post_CONTENT(community = community, post_id = post_id)
     
 @app.route('/r/<community>/posts/<int:post_id>/karma/decrement', methods = ['PUT']) #must find way to send status code '200'
 def decrement_post(community, post_id): 
     vote(community=community, post_id=post_id, is_increment=False)
-    return redirect(url_for('retrive_post_CONTENT', community = community, post_id = post_id))
+    return retrive_post_CONTENT(community = community, post_id = post_id)
 
 @app.route('/r/<community>/posts/<int:post_id>/comments', methods = ['GET'])
 def retrive_post_CONTENT(community, post_id):
@@ -153,9 +161,6 @@ def retrive_post_CONTENT(community, post_id):
     whole_dict['comments'] = comments
     return jsonify(whole_dict)
 
-    
-
-
 @app.route('/r/<community>', methods = ["GET"])
 def commmunity_posts(community):
     conn, cur = Connect_to_db(need_dicts_factory=True)
@@ -164,9 +169,11 @@ def commmunity_posts(community):
                                        ORDER BY date DESC \
                                        LIMIT 20;".format(community)).fetchall()    
     Close_db(conn, cur)
-    return jsonify(all_community_posts)
-    
-    
+    results = {}
+    results['results'] = all_community_posts
+    # return jsonify(all_community_posts)
+    return jsonify(results)
+      
 @app.route('/r/all', methods=['GET'])
 def topPosts():
     conn, cur = Connect_to_db(need_dicts_factory=True)
@@ -182,29 +189,39 @@ def topPosts():
 @app.route('/', methods=['GET'])
 def home():
     #shows post
-    conn, cur = Connect_to_db()
+    conn, cur = Connect_to_db(need_dicts_factory=True)
     all_posts = cur.execute('SELECT * FROM Posts \
                              ORDER BY date DESC \
                              LIMIT 20;').fetchall()
     Close_db(conn, cur)
 
+    results = {}
+    results['posts'] = all_posts
+    return jsonify(results)
+    # return jsonify(all_posts)
 
-    return jsonify(all_posts)
     # return '''<h1>A weeb's sad tale</h1>
     # <p>Vader: Your feelings for your waifu are not real<br>
     # StarKiller: THEY ARE TO ME!</p>'''
 
-@app.route('/sort', methods = ['GET'])
+@app.route('/sort', methods = ['GET', 'POST'])
 def sort_post_id():
-    
-    list = request.args['list']
-    list = list.split(',')
-    print(list[0])
-    for i in range(0, len(list)):
-        list[i] = int(list[i])
-    list = top_posts_from_list(list)
-    return list
+    results = {}
+    if request.method == 'GET':
+        list = request.args['list']
+        list = list.split(',')
+        print(list[0])
+        for i in range(0, len(list)):
+            list[i] = int(list[i])
+        list = top_posts_from_list(list)
+        results['results'] = list
 
+    elif request.method == 'POST':
+        data = request.get_json()
+        post_id_list = data['list'] #list of post_ids'
+        results['results'] = top_posts_from_list(post_id_list)
+
+    return jsonify(results)
 
 def top_posts_from_list(someList):
     conn, cur = Connect_to_db(need_dicts_factory=True)
@@ -212,16 +229,16 @@ def top_posts_from_list(someList):
                                      WHERE post_id IN {} \
                                      ORDER BY karma DESC;".format(tuple(someList))).fetchall()
     Close_db(conn, cur)
-    return jsonify(top_scoring_posts)
-
-
+    # return jsonify(top_scoring_posts)
+    return top_scoring_posts
 
 @app.errorhandler(404)
 def page_not_found(e):
     return '''<h1>404 NOT FOUND (i think)</h1><p>{}</p>'''.format(e), 404
 
 
+
+
 app.run()
 
-# print(top_posts_from_list([1200, 787]))
 
