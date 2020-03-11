@@ -238,7 +238,5 @@ def page_not_found(e):
 
 
 
-
-app.run()
-
-
+if __name__ == "__main__":
+    app.run()
