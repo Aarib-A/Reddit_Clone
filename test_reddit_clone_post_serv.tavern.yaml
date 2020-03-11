@@ -1,39 +1,39 @@
 test_name: Testing the requirments of Reddit_Clone.py
 
 stages:
-  - name : Get all posts sorted by KARMA
-    request:
-      url: http://127.0.0.1:5000/r/all
-      method: GET
-    response:
-      status_code: 200
-      # body:
-      # headers:
+  # - name : Get all posts sorted by KARMA
+  #   request:
+  #     url: http://127.0.0.1:5000/r/all
+  #     method: GET
+  #   response:
+  #     status_code: 200
+  #     # body:
+  #     # headers:
     
-      body:
-        posts: 
+  #     body:
+  #       posts: 
     
-          - Owner_ID: 1
-            comm_name: "weebs"
-            date: "2020-03-08 01:54:47.039908"
-            downvotes: 1
-            karma: 4
-            owner_name: "Mike"
-            post_body: "BC Raphtalia is best waifu"
-            post_id: 787
-            post_title: "Why Sheild Hero is good?"
-            upvotes: 5
+  #         - Owner_ID: 1
+  #           comm_name: "weebs"
+  #           date: "2020-03-08 01:54:47.039908"
+  #           downvotes: 1
+  #           karma: 4
+  #           owner_name: "Mike"
+  #           post_body: "BC Raphtalia is best waifu"
+  #           post_id: 787
+  #           post_title: "Why Sheild Hero is good?"
+  #           upvotes: 5
           
-          - Owner_ID: 9000
-            comm_name: "gaming"
-            date: "2020-03-08 02:01:35.184508"
-            downvotes: 1
-            karma: 2
-            owner_name: "Just some guy"
-            post_body: "the original COD:MW is still alot better than the reboot."
-            post_id: 1200
-            post_title: "Good taste"
-            upvotes: 3
+  #         - Owner_ID: 9000
+  #           comm_name: "gaming"
+  #           date: "2020-03-08 02:01:35.184508"
+  #           downvotes: 1
+  #           karma: 2
+  #           owner_name: "Just some guy"
+  #           post_body: "the original COD:MW is still alot better than the reboot."
+  #           post_id: 1200
+  #           post_title: "Good taste"
+  #           upvotes: 3
 
   - name: Create New Post
     request: 
@@ -96,50 +96,6 @@ stages:
 
 
 
-  - name: Delete Post
-    request:
-        url: http://127.0.0.1:5000/r/post/737/del
-        method: POST
-      
-    response: 
-      status_code: 302
-
-
-
-  - name: Did It actually get DELETED
-    request:
-        url: http://127.0.0.1:5000/r/all
-        method: GET
-      
-    response: 
-      body:
-        posts:
-          - Owner_ID: 1
-            comm_name: "weebs"
-            date: "2020-03-08 01:54:47.039908"
-            downvotes: 1
-            karma: 4
-            owner_name: "Mike"
-            post_body: "BC Raphtalia is best waifu"
-            post_id: 787
-            post_title: "Why Sheild Hero is good?"
-            upvotes: 5
-
-
-          - Owner_ID: 9000
-            comm_name: "gaming"
-            date: "2020-03-08 02:01:35.184508"
-            downvotes: 1
-            karma: 2
-            owner_name: "Just some guy"
-            post_body: "the original COD:MW is still alot better than the reboot."
-            post_id: 1200
-            post_title: "Good taste"
-            upvotes: 3
-
-
-
-
 
   - name: Retrieve Existing Post
     request:
@@ -173,7 +129,7 @@ stages:
             upvotes: 1
 
 
-        posts:
+        post:
           Owner_ID: 9000
           comm_name: "gaming"
           date: "2020-03-08 02:01:35.184508"
@@ -185,3 +141,124 @@ stages:
           post_title: "Good taste"
           upvotes: 3
 
+
+  - name: List the n most recent posts to a particular community
+    request:
+        url: http://127.0.0.1:5000/r/weebs
+        method: GET
+      
+    response: 
+      status_code: 200
+      body:
+        results:
+          - Owner_ID: 9000
+            comm_name: "weebs"
+            # date: "2020-03-11 04:14:56.681884"
+            downvotes: 0
+            karma: 1
+            owner_name: "Just some guy"
+            post_body: "Darth Vader: Your feelings for her are not real.\nStarkiller: THEY ARE TO ME."
+            post_id: 737
+            post_title: "Relatable to every weeb?"
+            upvotes: 1
+
+          - Owner_ID: 1
+            comm_name: "weebs"
+            date: "2020-03-08 01:54:47.039908"
+            downvotes: 1
+            karma: 4
+            owner_name: "Mike"
+            post_body: "BC Raphtalia is best waifu"
+            post_id: 787
+            post_title: "Why Sheild Hero is good?"
+            upvotes: 5
+
+
+  # - name: List the n most recent posts to any community 
+  #   request:
+  #       url: http://127.0.0.1:5000/
+  #       method: GET
+      
+  #   response: 
+  #     status_code: 200
+  #     body:
+  #       posts:
+
+  #         - Owner_ID: 9000
+  #           comm_name: "weebs"
+  #           date: "2020-03-11 04:14:56.681884"
+  #           downvotes: 0
+  #           karma: 1
+  #           owner_name: "Just some guy"
+  #           post_body: "Darth Vader: Your feelings for her are not real.\nStarkiller: THEY ARE TO ME."
+  #           post_id: 737
+  #           post_title: "Relatable to every weeb?"
+  #           upvotes: 1
+
+  #         - Owner_ID: 9000
+  #           comm_name: "gaming"
+  #           date: "2020-03-08 02:01:35.184508"
+  #           downvotes: 1
+  #           karma: 2
+  #           owner_name: "Just some guy"
+  #           post_body: "the original COD:MW is still alot better than the reboot."
+  #           post_id: 1200
+  #           post_title: "Good taste"
+  #           upvotes: 3
+
+
+
+  #         - Owner_ID: 1
+  #           comm_name: "weebs"
+  #           date: "2020-03-08 01:54:47.039908"
+  #           downvotes: 1
+  #           karma: 4
+  #           owner_name: "Mike"
+  #           post_body: "BC Raphtalia is best waifu"
+  #           post_id: 787
+  #           post_title: "Why Sheild Hero is good?"
+  #           upvotes: 5
+
+
+
+  # - name: deleting and existing Post 
+  #   request: 
+  #     url: http://127.0.0.1:5000/r/post/737/del
+  #     method: POST
+
+    
+  #   response:
+  #     status_code: 301
+
+
+  # - name: did it really delete the post
+  #   request:
+  #     url: http://127.0.0.1:5000/r/all
+  #     method: GET
+  #   response:
+  #     status_code: 200
+    
+  #     body:
+  #       posts: 
+    
+  #         - Owner_ID: 1
+  #           comm_name: "weebs"
+  #           date: "2020-03-08 01:54:47.039908"
+  #           downvotes: 1
+  #           karma: 4
+  #           owner_name: "Mike"
+  #           post_body: "BC Raphtalia is best waifu"
+  #           post_id: 787
+  #           post_title: "Why Sheild Hero is good?"
+  #           upvotes: 5
+          
+  #         - Owner_ID: 9000
+  #           comm_name: "gaming"
+  #           date: "2020-03-08 02:01:35.184508"
+  #           downvotes: 1
+  #           karma: 2
+  #           owner_name: "Just some guy"
+  #           post_body: "the original COD:MW is still alot better than the reboot."
+  #           post_id: 1200
+  #           post_title: "Good taste"
+  #           upvotes: 3
