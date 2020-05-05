@@ -1,0 +1,1850 @@
+============================= test session starts ==============================
+platform linux2 -- Python 2.7.17, pytest-4.5.0, py-1.8.1, pluggy-0.13.1
+rootdir: /mnt/c/Users/AR-LEGION-LAPTOP/Documents/GitHub/Reddit_Clone
+plugins: tavern-0.34.0
+collected 1 item
+
+test_reddit_clone.tavern.yaml F                                          [100%]
+
+=================================== FAILURES ===================================
+_ /mnt/c/Users/AR-LEGION-LAPTOP/Documents/GitHub/Reddit_Clone/test_reddit_clone.tavern.yaml::Testing the requirments of Reddit_Clone.py _
+
+cls = <class '_pytest.runner.CallInfo'>
+func = <function <lambda> at 0x7f73a85c6d50>, when = 'call'
+reraise = (<class '_pytest.outcomes.Exit'>, <type 'exceptions.KeyboardInterrupt'>)
+
+    @classmethod
+    def from_call(cls, func, when, reraise=None):
+        #: context of invocation: one of "setup", "call",
+        #: "teardown", "memocollect"
+        start = time()
+        excinfo = None
+        try:
+>           result = func()
+
+/home/ar/.local/lib/python2.7/site-packages/_pytest/runner.py:225: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>       lambda: ihook(item=item, **kwds), when=when, reraise=reraise
+    )
+
+/home/ar/.local/lib/python2.7/site-packages/_pytest/runner.py:197: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_HookCaller 'pytest_runtest_call'>, args = ()
+kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+notincall = set([])
+
+    def __call__(self, *args, **kwargs):
+        if args:
+            raise TypeError("hook calling supports only keyword arguments")
+        assert not self.is_historic()
+        if self.spec and self.spec.argnames:
+            notincall = (
+                set(self.spec.argnames) - set(["__multicall__"]) - set(kwargs.keys())
+            )
+            if notincall:
+                warnings.warn(
+                    "Argument(s) {} which are declared in the hookspec "
+                    "can not be found in this hook call".format(tuple(notincall)),
+                    stacklevel=2,
+                )
+>       return self._hookexec(self, self.get_hookimpls(), kwargs)
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/hooks.py:286: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_pytest.config.PytestPluginManager object at 0x7f73ac75ba90>
+hook = <_HookCaller 'pytest_runtest_call'>
+methods = [<HookImpl plugin_name='runner', plugin=<module '_pytest.runner' from '/home/ar/.local/lib/python2.7/site-packages/_py..._Clone.py>>>, <HookImpl plugin_name='logging-plugin', plugin=<_pytest.logging.LoggingPlugin object at 0x7f73a8866150>>]
+kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+
+    def _hookexec(self, hook, methods, kwargs):
+        # called from all hookcaller instances.
+        # enable_tracing will set its own wrapping function at self._inner_hookexec
+>       return self._inner_hookexec(hook, methods, kwargs)
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/manager.py:93: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+hook = <_HookCaller 'pytest_runtest_call'>
+methods = [<HookImpl plugin_name='runner', plugin=<module '_pytest.runner' from '/home/ar/.local/lib/python2.7/site-packages/_py..._Clone.py>>>, <HookImpl plugin_name='logging-plugin', plugin=<_pytest.logging.LoggingPlugin object at 0x7f73a8866150>>]
+kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+
+    self._inner_hookexec = lambda hook, methods, kwargs: hook.multicall(
+        methods,
+        kwargs,
+>       firstresult=hook.spec.opts.get("firstresult") if hook.spec else False,
+    )
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/manager.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+hook_impls = [<HookImpl plugin_name='runner', plugin=<module '_pytest.runner' from '/home/ar/.local/lib/python2.7/site-packages/_py..._Clone.py>>>, <HookImpl plugin_name='logging-plugin', plugin=<_pytest.logging.LoggingPlugin object at 0x7f73a8866150>>]
+caller_kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+firstresult = False
+
+    def _multicall(hook_impls, caller_kwargs, firstresult=False):
+        """Execute a call into multiple python functions/methods and return the
+        result(s).
+    
+        ``caller_kwargs`` comes from _HookCaller.__call__().
+        """
+        __tracebackhide__ = True
+        results = []
+        excinfo = None
+        try:  # run impl and wrapper setup functions in a loop
+            teardowns = []
+            try:
+                for hook_impl in reversed(hook_impls):
+                    try:
+                        args = [caller_kwargs[argname] for argname in hook_impl.argnames]
+                    except KeyError:
+                        for argname in hook_impl.argnames:
+                            if argname not in caller_kwargs:
+                                raise HookCallError(
+                                    "hook call must provide argument %r" % (argname,)
+                                )
+    
+                    if hook_impl.hookwrapper:
+                        try:
+                            gen = hook_impl.function(*args)
+                            next(gen)  # first yield
+                            teardowns.append(gen)
+                        except StopIteration:
+                            _raise_wrapfail(gen, "did not yield")
+                    else:
+                        res = hook_impl.function(*args)
+                        if res is not None:
+                            results.append(res)
+                            if firstresult:  # halt further impl calls
+                                break
+            except BaseException:
+                excinfo = sys.exc_info()
+        finally:
+            if firstresult:  # first result hooks return a single value
+                outcome = _Result(results[0] if results else None, excinfo)
+            else:
+                outcome = _Result(results, excinfo)
+    
+            # run all wrapper post-yield blocks
+            for gen in reversed(teardowns):
+                try:
+                    gen.send(outcome)
+                    _raise_wrapfail(gen, "has second yield")
+                except StopIteration:
+                    pass
+    
+>           return outcome.get_result()
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/callers.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pluggy.callers._Result object at 0x7f73a85b3190>
+
+    def get_result(self):
+        """Get the result(s) for this hook call.
+    
+        If the hook was marked as a ``firstresult`` only a single value
+        will be returned otherwise a list of results.
+        """
+        __tracebackhide__ = True
+        if self._excinfo is None:
+            return self._result
+        else:
+            ex = self._excinfo
+            if _py3:
+                raise ex[1].with_traceback(ex[2])
+>           _reraise(*ex)  # noqa
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/callers.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+hook_impls = [<HookImpl plugin_name='runner', plugin=<module '_pytest.runner' from '/home/ar/.local/lib/python2.7/site-packages/_py..._Clone.py>>>, <HookImpl plugin_name='logging-plugin', plugin=<_pytest.logging.LoggingPlugin object at 0x7f73a8866150>>]
+caller_kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+firstresult = False
+
+    def _multicall(hook_impls, caller_kwargs, firstresult=False):
+        """Execute a call into multiple python functions/methods and return the
+        result(s).
+    
+        ``caller_kwargs`` comes from _HookCaller.__call__().
+        """
+        __tracebackhide__ = True
+        results = []
+        excinfo = None
+        try:  # run impl and wrapper setup functions in a loop
+            teardowns = []
+            try:
+                for hook_impl in reversed(hook_impls):
+                    try:
+                        args = [caller_kwargs[argname] for argname in hook_impl.argnames]
+                    except KeyError:
+                        for argname in hook_impl.argnames:
+                            if argname not in caller_kwargs:
+                                raise HookCallError(
+                                    "hook call must provide argument %r" % (argname,)
+                                )
+    
+                    if hook_impl.hookwrapper:
+                        try:
+                            gen = hook_impl.function(*args)
+                            next(gen)  # first yield
+                            teardowns.append(gen)
+                        except StopIteration:
+                            _raise_wrapfail(gen, "did not yield")
+                    else:
+>                       res = hook_impl.function(*args)
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/callers.py:187: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+item = <YamlItem Testing the requirments of Reddit_Clone.py>
+
+    def pytest_runtest_call(item):
+        _update_current_test_var(item, "call")
+        sys.last_type, sys.last_value, sys.last_traceback = (None, None, None)
+        try:
+>           item.runtest()
+
+/home/ar/.local/lib/python2.7/site-packages/_pytest/runner.py:122: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <YamlItem Testing the requirments of Reddit_Clone.py>
+
+    def runtest(self):
+        self.global_cfg = load_global_cfg(self.config)
+    
+        self.global_cfg.setdefault("variables", {})
+    
+        load_plugins(self.global_cfg)
+    
+        self.global_cfg["tavern_internal"] = {"pytest_hook_caller": self.config.hook}
+    
+        # INTERNAL
+        # NOTE - now that we can 'mark' tests, we could use pytest.mark.xfail
+        # instead. This doesn't differentiate between an error in verification
+        # and an error when running the test though.
+        xfail = self.spec.get("_xfail", False)
+    
+        try:
+            fixture_values = self._load_fixture_values()
+            self.global_cfg["variables"].update(fixture_values)
+    
+            call_hook(
+                self.global_cfg,
+                "pytest_tavern_beta_before_every_test_run",
+                test_dict=self.spec,
+                variables=self.global_cfg["variables"],
+            )
+    
+>           verify_tests(self.spec)
+
+/home/ar/.local/lib/python2.7/site-packages/tavern/testutils/pytesthook/item.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+test_spec = {'stages': [{'request': {'url': 'http://127.0.0.1:5000/r/all', 'method': 'GET'..._ID': '9000,'}]}}}], 'test_name': 'Testing the requirments of Reddit_Clone.py'}
+with_plugins = True
+
+    def verify_tests(test_spec, with_plugins=True):
+        """Verify that a specific test block is correct
+    
+        Todo:
+            Load schema file once. Requires some caching of the file
+    
+        Args:
+            test_spec (dict): Test in dictionary form
+    
+        Raises:
+            BadSchemaError: Schema did not match
+        """
+        here = os.path.dirname(os.path.abspath(__file__))
+    
+        schema_filename = os.path.join(here, "tests.schema.yaml")
+        schema = load_schema_file(schema_filename, with_plugins)
+    
+>       verify_generic(test_spec, schema)
+
+/home/ar/.local/lib/python2.7/site-packages/tavern/schemas/files.py:153: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+to_verify = {'stages': [{'request': {'url': 'http://127.0.0.1:5000/r/all', 'method': 'GET'..._ID': '9000,'}]}}}], 'test_name': 'Testing the requirments of Reddit_Clone.py'}
+schema = {'schema;stage': {'required': True, 'type': 'map', 'mapping': {'mqtt_response'...'func': 'validate_request_json'}, 'type': 'map', 'desc': 'Matches test blocks'}
+
+    def verify_generic(to_verify, schema):
+        """Verify a generic file against a given schema
+    
+        Args:
+            to_verify (dict): Filename of source tests to check
+            schema (dict): Schema to verify against
+    
+        Raises:
+            BadSchemaError: Schema did not match
+        """
+        logger.debug("Verifying %s against %s", to_verify, schema)
+    
+        here = os.path.dirname(os.path.abspath(__file__))
+        extension_module_filename = os.path.join(here, "extensions.py")
+    
+        verifier = core.Core(
+            source_data=to_verify,
+            schema_data=schema,
+            extensions=[extension_module_filename],
+        )
+    
+        try:
+            verifier.validate()
+        except pykwalify.errors.PyKwalifyException as e:
+            logger.exception("Error validating %s", to_verify)
+>           raise_from(BadSchemaError(), e)
+
+/home/ar/.local/lib/python2.7/site-packages/tavern/schemas/files.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+exc = BadSchemaError()
+cause = SchemaError(msg='Schema validation failed:
+ - Key 'json' does not match any re...ned. Path: '/stages/0'.
+ - Key 'response' was not defined. Path: '/stages/0'.')
+
+    def raise_from(exc, cause):
+        """
+        Equivalent to:
+    
+            raise EXCEPTION from CAUSE
+    
+        on Python 3. (See PEP 3134).
+        """
+        # Is either arg an exception class (e.g. IndexError) rather than
+        # instance (e.g. IndexError('my message here')? If so, pass the
+        # name of the class undisturbed through to "raise ... from ...".
+        if isinstance(exc, type) and issubclass(exc, Exception):
+            e = exc()
+            # exc = exc.__name__
+            # execstr = "e = " + _repr_strip(exc) + "()"
+            # myglobals, mylocals = _get_caller_globals_and_locals()
+            # exec(execstr, myglobals, mylocals)
+        else:
+            e = exc
+        e.__suppress_context__ = False
+        if isinstance(cause, type) and issubclass(cause, Exception):
+            e.__cause__ = cause()
+            e.__cause__.__traceback__ = sys.exc_info()[2]
+            e.__suppress_context__ = True
+        elif cause is None:
+            e.__cause__ = None
+            e.__suppress_context__ = True
+        elif isinstance(cause, BaseException):
+            e.__cause__ = cause
+            object.__setattr__(e.__cause__,  '__traceback__', sys.exc_info()[2])
+            e.__suppress_context__ = True
+        else:
+            raise TypeError("exception causes must derive from BaseException")
+        e.__context__ = sys.exc_info()[1]
+>       raise e
+E       BadSchemaError
+
+/home/ar/.local/lib/python2.7/site-packages/future/utils/__init__.py:483: BadSchemaError
+------------------------------ Captured log call -------------------------------
+ERROR    pykwalify.core:core.py:162 validation.invalid
+ERROR    pykwalify.core:core.py:163  --- All found errors ---
+ERROR    pykwalify.core:core.py:164 [u"Key 'json' does not match any regex 'headers|redirect_query_params'. Path: '/stages/0/response'", u"Cannot find required key 'type'. Path: '/stages/0'", u"Cannot find required key 'id'. Path: '/stages/0'", u"Key 'request' was not defined. Path: '/stages/0'", u"Key 'name' was not defined. Path: '/stages/0'", u"Key 'response' was not defined. Path: '/stages/0'"]
+ERROR    tavern.schemas.files:files.py:109 Error validating {'stages': [{'request': {'url': 'http://127.0.0.1:5000/r/all', 'method': 'GET'}, 'name': 'Get all posts sorted by KARMA', 'response': {'status_code': 200, 'json': {'posts': [{'owner_name': 'Mike', 'post_body': 'BC Raphtalia is best waifu', 'post_title': 'Why Sheild Hero is good?', 'downvotes': 1, 'post_id': 787, 'comm_name': 'weebs', 'karma': 4, 'date': '2020-03-08 01:54:47.039908', 'upvotes': 5, 'Owner_ID': '1,'}, {'owner_name': 'Just some guy', 'post_body': 'the original COD:MW is still alot better than the reboot.', 'post_title': 'Good taste', 'downvotes': 1, 'post_id': 1200, 'comm_name': 'gaming', 'karma': 2, 'date': '2020-03-08 02:01:35.184508', 'upvotes': 3, 'Owner_ID': '9000,'}]}}}], 'test_name': 'Testing the requirments of Reddit_Clone.py'}
+Traceback (most recent call last):
+  File "/home/ar/.local/lib/python2.7/site-packages/tavern/schemas/files.py", line 107, in verify_generic
+    verifier.validate()
+  File "/home/ar/.local/lib/python2.7/site-packages/pykwalify/core.py", line 167, in validate
+    error_msg=u'.\n - '.join(self.validation_errors)))
+SchemaError: <SchemaError: error code 2: Schema validation failed:
+ - Key 'json' does not match any regex 'headers|redirect_query_params'. Path: '/stages/0/response'.
+ - Cannot find required key 'type'. Path: '/stages/0'.
+ - Cannot find required key 'id'. Path: '/stages/0'.
+ - Key 'request' was not defined. Path: '/stages/0'.
+ - Key 'name' was not defined. Path: '/stages/0'.
+ - Key 'response' was not defined. Path: '/stages/0'.: Path: '/'>
+=============================== warnings summary ===============================
+/home/ar/.local/lib/python2.7/site-packages/tavern/testutils/pytesthook/item.py:47
+  /home/ar/.local/lib/python2.7/site-packages/tavern/testutils/pytesthook/item.py:47: FutureWarning: Tavern will drop support for Python 2 in a future release, please switch to using Python 3 (see https://docs.pytest.org/en/latest/py27-py34-deprecation.html)
+    FutureWarning,
+
+-- Docs: https://docs.pytest.org/en/latest/warnings.html
+===================== 1 failed, 1 warnings in 1.15 seconds =====================
+============================= test session starts ==============================
+platform linux2 -- Python 2.7.17, pytest-4.5.0, py-1.8.1, pluggy-0.13.1
+rootdir: /mnt/c/Users/AR-LEGION-LAPTOP/Documents/GitHub/Reddit_Clone
+plugins: tavern-0.34.0
+collected 1 item
+
+test_reddit_clone.tavern.yaml F                                          [100%]
+
+=================================== FAILURES ===================================
+_ /mnt/c/Users/AR-LEGION-LAPTOP/Documents/GitHub/Reddit_Clone/test_reddit_clone.tavern.yaml::Testing the requirments of Reddit_Clone.py _
+
+cls = <class '_pytest.runner.CallInfo'>
+func = <function <lambda> at 0x7fff79b26d50>, when = 'call'
+reraise = (<class '_pytest.outcomes.Exit'>, <type 'exceptions.KeyboardInterrupt'>)
+
+    @classmethod
+    def from_call(cls, func, when, reraise=None):
+        #: context of invocation: one of "setup", "call",
+        #: "teardown", "memocollect"
+        start = time()
+        excinfo = None
+        try:
+>           result = func()
+
+/home/ar/.local/lib/python2.7/site-packages/_pytest/runner.py:225: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>       lambda: ihook(item=item, **kwds), when=when, reraise=reraise
+    )
+
+/home/ar/.local/lib/python2.7/site-packages/_pytest/runner.py:197: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_HookCaller 'pytest_runtest_call'>, args = ()
+kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+notincall = set([])
+
+    def __call__(self, *args, **kwargs):
+        if args:
+            raise TypeError("hook calling supports only keyword arguments")
+        assert not self.is_historic()
+        if self.spec and self.spec.argnames:
+            notincall = (
+                set(self.spec.argnames) - set(["__multicall__"]) - set(kwargs.keys())
+            )
+            if notincall:
+                warnings.warn(
+                    "Argument(s) {} which are declared in the hookspec "
+                    "can not be found in this hook call".format(tuple(notincall)),
+                    stacklevel=2,
+                )
+>       return self._hookexec(self, self.get_hookimpls(), kwargs)
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/hooks.py:286: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_pytest.config.PytestPluginManager object at 0x7fff7dcfba90>
+hook = <_HookCaller 'pytest_runtest_call'>
+methods = [<HookImpl plugin_name='runner', plugin=<module '_pytest.runner' from '/home/ar/.local/lib/python2.7/site-packages/_py..._Clone.py>>>, <HookImpl plugin_name='logging-plugin', plugin=<_pytest.logging.LoggingPlugin object at 0x7fff79dc6150>>]
+kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+
+    def _hookexec(self, hook, methods, kwargs):
+        # called from all hookcaller instances.
+        # enable_tracing will set its own wrapping function at self._inner_hookexec
+>       return self._inner_hookexec(hook, methods, kwargs)
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/manager.py:93: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+hook = <_HookCaller 'pytest_runtest_call'>
+methods = [<HookImpl plugin_name='runner', plugin=<module '_pytest.runner' from '/home/ar/.local/lib/python2.7/site-packages/_py..._Clone.py>>>, <HookImpl plugin_name='logging-plugin', plugin=<_pytest.logging.LoggingPlugin object at 0x7fff79dc6150>>]
+kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+
+    self._inner_hookexec = lambda hook, methods, kwargs: hook.multicall(
+        methods,
+        kwargs,
+>       firstresult=hook.spec.opts.get("firstresult") if hook.spec else False,
+    )
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/manager.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+hook_impls = [<HookImpl plugin_name='runner', plugin=<module '_pytest.runner' from '/home/ar/.local/lib/python2.7/site-packages/_py..._Clone.py>>>, <HookImpl plugin_name='logging-plugin', plugin=<_pytest.logging.LoggingPlugin object at 0x7fff79dc6150>>]
+caller_kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+firstresult = False
+
+    def _multicall(hook_impls, caller_kwargs, firstresult=False):
+        """Execute a call into multiple python functions/methods and return the
+        result(s).
+    
+        ``caller_kwargs`` comes from _HookCaller.__call__().
+        """
+        __tracebackhide__ = True
+        results = []
+        excinfo = None
+        try:  # run impl and wrapper setup functions in a loop
+            teardowns = []
+            try:
+                for hook_impl in reversed(hook_impls):
+                    try:
+                        args = [caller_kwargs[argname] for argname in hook_impl.argnames]
+                    except KeyError:
+                        for argname in hook_impl.argnames:
+                            if argname not in caller_kwargs:
+                                raise HookCallError(
+                                    "hook call must provide argument %r" % (argname,)
+                                )
+    
+                    if hook_impl.hookwrapper:
+                        try:
+                            gen = hook_impl.function(*args)
+                            next(gen)  # first yield
+                            teardowns.append(gen)
+                        except StopIteration:
+                            _raise_wrapfail(gen, "did not yield")
+                    else:
+                        res = hook_impl.function(*args)
+                        if res is not None:
+                            results.append(res)
+                            if firstresult:  # halt further impl calls
+                                break
+            except BaseException:
+                excinfo = sys.exc_info()
+        finally:
+            if firstresult:  # first result hooks return a single value
+                outcome = _Result(results[0] if results else None, excinfo)
+            else:
+                outcome = _Result(results, excinfo)
+    
+            # run all wrapper post-yield blocks
+            for gen in reversed(teardowns):
+                try:
+                    gen.send(outcome)
+                    _raise_wrapfail(gen, "has second yield")
+                except StopIteration:
+                    pass
+    
+>           return outcome.get_result()
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/callers.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pluggy.callers._Result object at 0x7fff79b13190>
+
+    def get_result(self):
+        """Get the result(s) for this hook call.
+    
+        If the hook was marked as a ``firstresult`` only a single value
+        will be returned otherwise a list of results.
+        """
+        __tracebackhide__ = True
+        if self._excinfo is None:
+            return self._result
+        else:
+            ex = self._excinfo
+            if _py3:
+                raise ex[1].with_traceback(ex[2])
+>           _reraise(*ex)  # noqa
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/callers.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+hook_impls = [<HookImpl plugin_name='runner', plugin=<module '_pytest.runner' from '/home/ar/.local/lib/python2.7/site-packages/_py..._Clone.py>>>, <HookImpl plugin_name='logging-plugin', plugin=<_pytest.logging.LoggingPlugin object at 0x7fff79dc6150>>]
+caller_kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+firstresult = False
+
+    def _multicall(hook_impls, caller_kwargs, firstresult=False):
+        """Execute a call into multiple python functions/methods and return the
+        result(s).
+    
+        ``caller_kwargs`` comes from _HookCaller.__call__().
+        """
+        __tracebackhide__ = True
+        results = []
+        excinfo = None
+        try:  # run impl and wrapper setup functions in a loop
+            teardowns = []
+            try:
+                for hook_impl in reversed(hook_impls):
+                    try:
+                        args = [caller_kwargs[argname] for argname in hook_impl.argnames]
+                    except KeyError:
+                        for argname in hook_impl.argnames:
+                            if argname not in caller_kwargs:
+                                raise HookCallError(
+                                    "hook call must provide argument %r" % (argname,)
+                                )
+    
+                    if hook_impl.hookwrapper:
+                        try:
+                            gen = hook_impl.function(*args)
+                            next(gen)  # first yield
+                            teardowns.append(gen)
+                        except StopIteration:
+                            _raise_wrapfail(gen, "did not yield")
+                    else:
+>                       res = hook_impl.function(*args)
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/callers.py:187: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+item = <YamlItem Testing the requirments of Reddit_Clone.py>
+
+    def pytest_runtest_call(item):
+        _update_current_test_var(item, "call")
+        sys.last_type, sys.last_value, sys.last_traceback = (None, None, None)
+        try:
+>           item.runtest()
+
+/home/ar/.local/lib/python2.7/site-packages/_pytest/runner.py:122: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <YamlItem Testing the requirments of Reddit_Clone.py>
+
+    def runtest(self):
+        self.global_cfg = load_global_cfg(self.config)
+    
+        self.global_cfg.setdefault("variables", {})
+    
+        load_plugins(self.global_cfg)
+    
+        self.global_cfg["tavern_internal"] = {"pytest_hook_caller": self.config.hook}
+    
+        # INTERNAL
+        # NOTE - now that we can 'mark' tests, we could use pytest.mark.xfail
+        # instead. This doesn't differentiate between an error in verification
+        # and an error when running the test though.
+        xfail = self.spec.get("_xfail", False)
+    
+        try:
+            fixture_values = self._load_fixture_values()
+            self.global_cfg["variables"].update(fixture_values)
+    
+            call_hook(
+                self.global_cfg,
+                "pytest_tavern_beta_before_every_test_run",
+                test_dict=self.spec,
+                variables=self.global_cfg["variables"],
+            )
+    
+>           verify_tests(self.spec)
+
+/home/ar/.local/lib/python2.7/site-packages/tavern/testutils/pytesthook/item.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+test_spec = {'stages': [{'request': {'url': 'http://127.0.0.1:5000/r/all', 'method': 'GET'..._ID': '9000,'}]}}}], 'test_name': 'Testing the requirments of Reddit_Clone.py'}
+with_plugins = True
+
+    def verify_tests(test_spec, with_plugins=True):
+        """Verify that a specific test block is correct
+    
+        Todo:
+            Load schema file once. Requires some caching of the file
+    
+        Args:
+            test_spec (dict): Test in dictionary form
+    
+        Raises:
+            BadSchemaError: Schema did not match
+        """
+        here = os.path.dirname(os.path.abspath(__file__))
+    
+        schema_filename = os.path.join(here, "tests.schema.yaml")
+        schema = load_schema_file(schema_filename, with_plugins)
+    
+>       verify_generic(test_spec, schema)
+
+/home/ar/.local/lib/python2.7/site-packages/tavern/schemas/files.py:153: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+to_verify = {'stages': [{'request': {'url': 'http://127.0.0.1:5000/r/all', 'method': 'GET'..._ID': '9000,'}]}}}], 'test_name': 'Testing the requirments of Reddit_Clone.py'}
+schema = {'schema;stage': {'required': True, 'type': 'map', 'mapping': {'mqtt_response'...'func': 'validate_request_json'}, 'type': 'map', 'desc': 'Matches test blocks'}
+
+    def verify_generic(to_verify, schema):
+        """Verify a generic file against a given schema
+    
+        Args:
+            to_verify (dict): Filename of source tests to check
+            schema (dict): Schema to verify against
+    
+        Raises:
+            BadSchemaError: Schema did not match
+        """
+        logger.debug("Verifying %s against %s", to_verify, schema)
+    
+        here = os.path.dirname(os.path.abspath(__file__))
+        extension_module_filename = os.path.join(here, "extensions.py")
+    
+        verifier = core.Core(
+            source_data=to_verify,
+            schema_data=schema,
+            extensions=[extension_module_filename],
+        )
+    
+        try:
+            verifier.validate()
+        except pykwalify.errors.PyKwalifyException as e:
+            logger.exception("Error validating %s", to_verify)
+>           raise_from(BadSchemaError(), e)
+
+/home/ar/.local/lib/python2.7/site-packages/tavern/schemas/files.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+exc = BadSchemaError()
+cause = SchemaError(msg='Schema validation failed:
+ - Key 'json' does not match any re...ned. Path: '/stages/0'.
+ - Key 'response' was not defined. Path: '/stages/0'.')
+
+    def raise_from(exc, cause):
+        """
+        Equivalent to:
+    
+            raise EXCEPTION from CAUSE
+    
+        on Python 3. (See PEP 3134).
+        """
+        # Is either arg an exception class (e.g. IndexError) rather than
+        # instance (e.g. IndexError('my message here')? If so, pass the
+        # name of the class undisturbed through to "raise ... from ...".
+        if isinstance(exc, type) and issubclass(exc, Exception):
+            e = exc()
+            # exc = exc.__name__
+            # execstr = "e = " + _repr_strip(exc) + "()"
+            # myglobals, mylocals = _get_caller_globals_and_locals()
+            # exec(execstr, myglobals, mylocals)
+        else:
+            e = exc
+        e.__suppress_context__ = False
+        if isinstance(cause, type) and issubclass(cause, Exception):
+            e.__cause__ = cause()
+            e.__cause__.__traceback__ = sys.exc_info()[2]
+            e.__suppress_context__ = True
+        elif cause is None:
+            e.__cause__ = None
+            e.__suppress_context__ = True
+        elif isinstance(cause, BaseException):
+            e.__cause__ = cause
+            object.__setattr__(e.__cause__,  '__traceback__', sys.exc_info()[2])
+            e.__suppress_context__ = True
+        else:
+            raise TypeError("exception causes must derive from BaseException")
+        e.__context__ = sys.exc_info()[1]
+>       raise e
+E       BadSchemaError
+
+/home/ar/.local/lib/python2.7/site-packages/future/utils/__init__.py:483: BadSchemaError
+------------------------------ Captured log call -------------------------------
+ERROR    pykwalify.core:core.py:162 validation.invalid
+ERROR    pykwalify.core:core.py:163  --- All found errors ---
+ERROR    pykwalify.core:core.py:164 [u"Key 'json' does not match any regex 'headers|redirect_query_params'. Path: '/stages/0/response'", u"Cannot find required key 'type'. Path: '/stages/0'", u"Cannot find required key 'id'. Path: '/stages/0'", u"Key 'request' was not defined. Path: '/stages/0'", u"Key 'name' was not defined. Path: '/stages/0'", u"Key 'response' was not defined. Path: '/stages/0'"]
+ERROR    tavern.schemas.files:files.py:109 Error validating {'stages': [{'request': {'url': 'http://127.0.0.1:5000/r/all', 'method': 'GET'}, 'name': 'Get all posts sorted by KARMA', 'response': {'status_code': 200, 'json': {'posts': [{'owner_name': 'Mike', 'post_body': 'BC Raphtalia is best waifu', 'post_title': 'Why Sheild Hero is good?', 'downvotes': 1, 'post_id': 787, 'comm_name': 'weebs', 'karma': 4, 'date': '2020-03-08 01:54:47.039908', 'upvotes': 5, 'Owner_ID': '1,'}, {'owner_name': 'Just some guy', 'post_body': 'the original COD:MW is still alot better than the reboot.', 'post_title': 'Good taste', 'downvotes': 1, 'post_id': 1200, 'comm_name': 'gaming', 'karma': 2, 'date': '2020-03-08 02:01:35.184508', 'upvotes': 3, 'Owner_ID': '9000,'}]}}}], 'test_name': 'Testing the requirments of Reddit_Clone.py'}
+Traceback (most recent call last):
+  File "/home/ar/.local/lib/python2.7/site-packages/tavern/schemas/files.py", line 107, in verify_generic
+    verifier.validate()
+  File "/home/ar/.local/lib/python2.7/site-packages/pykwalify/core.py", line 167, in validate
+    error_msg=u'.\n - '.join(self.validation_errors)))
+SchemaError: <SchemaError: error code 2: Schema validation failed:
+ - Key 'json' does not match any regex 'headers|redirect_query_params'. Path: '/stages/0/response'.
+ - Cannot find required key 'type'. Path: '/stages/0'.
+ - Cannot find required key 'id'. Path: '/stages/0'.
+ - Key 'request' was not defined. Path: '/stages/0'.
+ - Key 'name' was not defined. Path: '/stages/0'.
+ - Key 'response' was not defined. Path: '/stages/0'.: Path: '/'>
+=============================== warnings summary ===============================
+/home/ar/.local/lib/python2.7/site-packages/tavern/testutils/pytesthook/item.py:47
+  /home/ar/.local/lib/python2.7/site-packages/tavern/testutils/pytesthook/item.py:47: FutureWarning: Tavern will drop support for Python 2 in a future release, please switch to using Python 3 (see https://docs.pytest.org/en/latest/py27-py34-deprecation.html)
+    FutureWarning,
+
+-- Docs: https://docs.pytest.org/en/latest/warnings.html
+===================== 1 failed, 1 warnings in 1.11 seconds =====================
+============================= test session starts ==============================
+platform linux2 -- Python 2.7.17, pytest-4.5.0, py-1.8.1, pluggy-0.13.1
+rootdir: /mnt/c/Users/AR-LEGION-LAPTOP/Documents/GitHub/Reddit_Clone
+plugins: tavern-0.34.0
+collected 1 item
+
+test_reddit_clone.tavern.yaml F                                          [100%]
+
+=================================== FAILURES ===================================
+_ /mnt/c/Users/AR-LEGION-LAPTOP/Documents/GitHub/Reddit_Clone/test_reddit_clone.tavern.yaml::Testing the requirments of Reddit_Clone.py _
+
+cls = <class '_pytest.runner.CallInfo'>
+func = <function <lambda> at 0x7fb158e06d50>, when = 'call'
+reraise = (<class '_pytest.outcomes.Exit'>, <type 'exceptions.KeyboardInterrupt'>)
+
+    @classmethod
+    def from_call(cls, func, when, reraise=None):
+        #: context of invocation: one of "setup", "call",
+        #: "teardown", "memocollect"
+        start = time()
+        excinfo = None
+        try:
+>           result = func()
+
+/home/ar/.local/lib/python2.7/site-packages/_pytest/runner.py:225: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>       lambda: ihook(item=item, **kwds), when=when, reraise=reraise
+    )
+
+/home/ar/.local/lib/python2.7/site-packages/_pytest/runner.py:197: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_HookCaller 'pytest_runtest_call'>, args = ()
+kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+notincall = set([])
+
+    def __call__(self, *args, **kwargs):
+        if args:
+            raise TypeError("hook calling supports only keyword arguments")
+        assert not self.is_historic()
+        if self.spec and self.spec.argnames:
+            notincall = (
+                set(self.spec.argnames) - set(["__multicall__"]) - set(kwargs.keys())
+            )
+            if notincall:
+                warnings.warn(
+                    "Argument(s) {} which are declared in the hookspec "
+                    "can not be found in this hook call".format(tuple(notincall)),
+                    stacklevel=2,
+                )
+>       return self._hookexec(self, self.get_hookimpls(), kwargs)
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/hooks.py:286: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_pytest.config.PytestPluginManager object at 0x7fb15cfdba90>
+hook = <_HookCaller 'pytest_runtest_call'>
+methods = [<HookImpl plugin_name='runner', plugin=<module '_pytest.runner' from '/home/ar/.local/lib/python2.7/site-packages/_py..._Clone.py>>>, <HookImpl plugin_name='logging-plugin', plugin=<_pytest.logging.LoggingPlugin object at 0x7fb1590a6150>>]
+kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+
+    def _hookexec(self, hook, methods, kwargs):
+        # called from all hookcaller instances.
+        # enable_tracing will set its own wrapping function at self._inner_hookexec
+>       return self._inner_hookexec(hook, methods, kwargs)
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/manager.py:93: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+hook = <_HookCaller 'pytest_runtest_call'>
+methods = [<HookImpl plugin_name='runner', plugin=<module '_pytest.runner' from '/home/ar/.local/lib/python2.7/site-packages/_py..._Clone.py>>>, <HookImpl plugin_name='logging-plugin', plugin=<_pytest.logging.LoggingPlugin object at 0x7fb1590a6150>>]
+kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+
+    self._inner_hookexec = lambda hook, methods, kwargs: hook.multicall(
+        methods,
+        kwargs,
+>       firstresult=hook.spec.opts.get("firstresult") if hook.spec else False,
+    )
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/manager.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+hook_impls = [<HookImpl plugin_name='runner', plugin=<module '_pytest.runner' from '/home/ar/.local/lib/python2.7/site-packages/_py..._Clone.py>>>, <HookImpl plugin_name='logging-plugin', plugin=<_pytest.logging.LoggingPlugin object at 0x7fb1590a6150>>]
+caller_kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+firstresult = False
+
+    def _multicall(hook_impls, caller_kwargs, firstresult=False):
+        """Execute a call into multiple python functions/methods and return the
+        result(s).
+    
+        ``caller_kwargs`` comes from _HookCaller.__call__().
+        """
+        __tracebackhide__ = True
+        results = []
+        excinfo = None
+        try:  # run impl and wrapper setup functions in a loop
+            teardowns = []
+            try:
+                for hook_impl in reversed(hook_impls):
+                    try:
+                        args = [caller_kwargs[argname] for argname in hook_impl.argnames]
+                    except KeyError:
+                        for argname in hook_impl.argnames:
+                            if argname not in caller_kwargs:
+                                raise HookCallError(
+                                    "hook call must provide argument %r" % (argname,)
+                                )
+    
+                    if hook_impl.hookwrapper:
+                        try:
+                            gen = hook_impl.function(*args)
+                            next(gen)  # first yield
+                            teardowns.append(gen)
+                        except StopIteration:
+                            _raise_wrapfail(gen, "did not yield")
+                    else:
+                        res = hook_impl.function(*args)
+                        if res is not None:
+                            results.append(res)
+                            if firstresult:  # halt further impl calls
+                                break
+            except BaseException:
+                excinfo = sys.exc_info()
+        finally:
+            if firstresult:  # first result hooks return a single value
+                outcome = _Result(results[0] if results else None, excinfo)
+            else:
+                outcome = _Result(results, excinfo)
+    
+            # run all wrapper post-yield blocks
+            for gen in reversed(teardowns):
+                try:
+                    gen.send(outcome)
+                    _raise_wrapfail(gen, "has second yield")
+                except StopIteration:
+                    pass
+    
+>           return outcome.get_result()
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/callers.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pluggy.callers._Result object at 0x7fb158df3190>
+
+    def get_result(self):
+        """Get the result(s) for this hook call.
+    
+        If the hook was marked as a ``firstresult`` only a single value
+        will be returned otherwise a list of results.
+        """
+        __tracebackhide__ = True
+        if self._excinfo is None:
+            return self._result
+        else:
+            ex = self._excinfo
+            if _py3:
+                raise ex[1].with_traceback(ex[2])
+>           _reraise(*ex)  # noqa
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/callers.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+hook_impls = [<HookImpl plugin_name='runner', plugin=<module '_pytest.runner' from '/home/ar/.local/lib/python2.7/site-packages/_py..._Clone.py>>>, <HookImpl plugin_name='logging-plugin', plugin=<_pytest.logging.LoggingPlugin object at 0x7fb1590a6150>>]
+caller_kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+firstresult = False
+
+    def _multicall(hook_impls, caller_kwargs, firstresult=False):
+        """Execute a call into multiple python functions/methods and return the
+        result(s).
+    
+        ``caller_kwargs`` comes from _HookCaller.__call__().
+        """
+        __tracebackhide__ = True
+        results = []
+        excinfo = None
+        try:  # run impl and wrapper setup functions in a loop
+            teardowns = []
+            try:
+                for hook_impl in reversed(hook_impls):
+                    try:
+                        args = [caller_kwargs[argname] for argname in hook_impl.argnames]
+                    except KeyError:
+                        for argname in hook_impl.argnames:
+                            if argname not in caller_kwargs:
+                                raise HookCallError(
+                                    "hook call must provide argument %r" % (argname,)
+                                )
+    
+                    if hook_impl.hookwrapper:
+                        try:
+                            gen = hook_impl.function(*args)
+                            next(gen)  # first yield
+                            teardowns.append(gen)
+                        except StopIteration:
+                            _raise_wrapfail(gen, "did not yield")
+                    else:
+>                       res = hook_impl.function(*args)
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/callers.py:187: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+item = <YamlItem Testing the requirments of Reddit_Clone.py>
+
+    def pytest_runtest_call(item):
+        _update_current_test_var(item, "call")
+        sys.last_type, sys.last_value, sys.last_traceback = (None, None, None)
+        try:
+>           item.runtest()
+
+/home/ar/.local/lib/python2.7/site-packages/_pytest/runner.py:122: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <YamlItem Testing the requirments of Reddit_Clone.py>
+
+    def runtest(self):
+        self.global_cfg = load_global_cfg(self.config)
+    
+        self.global_cfg.setdefault("variables", {})
+    
+        load_plugins(self.global_cfg)
+    
+        self.global_cfg["tavern_internal"] = {"pytest_hook_caller": self.config.hook}
+    
+        # INTERNAL
+        # NOTE - now that we can 'mark' tests, we could use pytest.mark.xfail
+        # instead. This doesn't differentiate between an error in verification
+        # and an error when running the test though.
+        xfail = self.spec.get("_xfail", False)
+    
+        try:
+            fixture_values = self._load_fixture_values()
+            self.global_cfg["variables"].update(fixture_values)
+    
+            call_hook(
+                self.global_cfg,
+                "pytest_tavern_beta_before_every_test_run",
+                test_dict=self.spec,
+                variables=self.global_cfg["variables"],
+            )
+    
+>           verify_tests(self.spec)
+
+/home/ar/.local/lib/python2.7/site-packages/tavern/testutils/pytesthook/item.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+test_spec = {'stages': [{'request': {'url': 'http://127.0.0.1:5000/r/all', 'method': 'GET'..._ID': '9000,'}]}}}], 'test_name': 'Testing the requirments of Reddit_Clone.py'}
+with_plugins = True
+
+    def verify_tests(test_spec, with_plugins=True):
+        """Verify that a specific test block is correct
+    
+        Todo:
+            Load schema file once. Requires some caching of the file
+    
+        Args:
+            test_spec (dict): Test in dictionary form
+    
+        Raises:
+            BadSchemaError: Schema did not match
+        """
+        here = os.path.dirname(os.path.abspath(__file__))
+    
+        schema_filename = os.path.join(here, "tests.schema.yaml")
+        schema = load_schema_file(schema_filename, with_plugins)
+    
+>       verify_generic(test_spec, schema)
+
+/home/ar/.local/lib/python2.7/site-packages/tavern/schemas/files.py:153: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+to_verify = {'stages': [{'request': {'url': 'http://127.0.0.1:5000/r/all', 'method': 'GET'..._ID': '9000,'}]}}}], 'test_name': 'Testing the requirments of Reddit_Clone.py'}
+schema = {'schema;stage': {'required': True, 'type': 'map', 'mapping': {'mqtt_response'...'func': 'validate_request_json'}, 'type': 'map', 'desc': 'Matches test blocks'}
+
+    def verify_generic(to_verify, schema):
+        """Verify a generic file against a given schema
+    
+        Args:
+            to_verify (dict): Filename of source tests to check
+            schema (dict): Schema to verify against
+    
+        Raises:
+            BadSchemaError: Schema did not match
+        """
+        logger.debug("Verifying %s against %s", to_verify, schema)
+    
+        here = os.path.dirname(os.path.abspath(__file__))
+        extension_module_filename = os.path.join(here, "extensions.py")
+    
+        verifier = core.Core(
+            source_data=to_verify,
+            schema_data=schema,
+            extensions=[extension_module_filename],
+        )
+    
+        try:
+            verifier.validate()
+        except pykwalify.errors.PyKwalifyException as e:
+            logger.exception("Error validating %s", to_verify)
+>           raise_from(BadSchemaError(), e)
+
+/home/ar/.local/lib/python2.7/site-packages/tavern/schemas/files.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+exc = BadSchemaError()
+cause = SchemaError(msg='Schema validation failed:
+ - Key 'json' does not match any re...ned. Path: '/stages/0'.
+ - Key 'response' was not defined. Path: '/stages/0'.')
+
+    def raise_from(exc, cause):
+        """
+        Equivalent to:
+    
+            raise EXCEPTION from CAUSE
+    
+        on Python 3. (See PEP 3134).
+        """
+        # Is either arg an exception class (e.g. IndexError) rather than
+        # instance (e.g. IndexError('my message here')? If so, pass the
+        # name of the class undisturbed through to "raise ... from ...".
+        if isinstance(exc, type) and issubclass(exc, Exception):
+            e = exc()
+            # exc = exc.__name__
+            # execstr = "e = " + _repr_strip(exc) + "()"
+            # myglobals, mylocals = _get_caller_globals_and_locals()
+            # exec(execstr, myglobals, mylocals)
+        else:
+            e = exc
+        e.__suppress_context__ = False
+        if isinstance(cause, type) and issubclass(cause, Exception):
+            e.__cause__ = cause()
+            e.__cause__.__traceback__ = sys.exc_info()[2]
+            e.__suppress_context__ = True
+        elif cause is None:
+            e.__cause__ = None
+            e.__suppress_context__ = True
+        elif isinstance(cause, BaseException):
+            e.__cause__ = cause
+            object.__setattr__(e.__cause__,  '__traceback__', sys.exc_info()[2])
+            e.__suppress_context__ = True
+        else:
+            raise TypeError("exception causes must derive from BaseException")
+        e.__context__ = sys.exc_info()[1]
+>       raise e
+E       BadSchemaError
+
+/home/ar/.local/lib/python2.7/site-packages/future/utils/__init__.py:483: BadSchemaError
+------------------------------ Captured log call -------------------------------
+ERROR    pykwalify.core:core.py:162 validation.invalid
+ERROR    pykwalify.core:core.py:163  --- All found errors ---
+ERROR    pykwalify.core:core.py:164 [u"Key 'json' does not match any regex 'headers|redirect_query_params'. Path: '/stages/0/response'", u"Cannot find required key 'type'. Path: '/stages/0'", u"Cannot find required key 'id'. Path: '/stages/0'", u"Key 'request' was not defined. Path: '/stages/0'", u"Key 'name' was not defined. Path: '/stages/0'", u"Key 'response' was not defined. Path: '/stages/0'"]
+ERROR    tavern.schemas.files:files.py:109 Error validating {'stages': [{'request': {'url': 'http://127.0.0.1:5000/r/all', 'method': 'GET'}, 'name': 'Get all posts sorted by KARMA', 'response': {'status_code': 200, 'json': {'posts': [{'owner_name': 'Mike', 'post_body': 'BC Raphtalia is best waifu', 'post_title': 'Why Sheild Hero is good?', 'downvotes': 1, 'post_id': 787, 'comm_name': 'weebs', 'karma': 4, 'date': '2020-03-08 01:54:47.039908', 'upvotes': 5, 'Owner_ID': '1,'}, {'owner_name': 'Just some guy', 'post_body': 'the original COD:MW is still alot better than the reboot.', 'post_title': 'Good taste', 'downvotes': 1, 'post_id': 1200, 'comm_name': 'gaming', 'karma': 2, 'date': '2020-03-08 02:01:35.184508', 'upvotes': 3, 'Owner_ID': '9000,'}]}}}], 'test_name': 'Testing the requirments of Reddit_Clone.py'}
+Traceback (most recent call last):
+  File "/home/ar/.local/lib/python2.7/site-packages/tavern/schemas/files.py", line 107, in verify_generic
+    verifier.validate()
+  File "/home/ar/.local/lib/python2.7/site-packages/pykwalify/core.py", line 167, in validate
+    error_msg=u'.\n - '.join(self.validation_errors)))
+SchemaError: <SchemaError: error code 2: Schema validation failed:
+ - Key 'json' does not match any regex 'headers|redirect_query_params'. Path: '/stages/0/response'.
+ - Cannot find required key 'type'. Path: '/stages/0'.
+ - Cannot find required key 'id'. Path: '/stages/0'.
+ - Key 'request' was not defined. Path: '/stages/0'.
+ - Key 'name' was not defined. Path: '/stages/0'.
+ - Key 'response' was not defined. Path: '/stages/0'.: Path: '/'>
+=============================== warnings summary ===============================
+/home/ar/.local/lib/python2.7/site-packages/tavern/testutils/pytesthook/item.py:47
+  /home/ar/.local/lib/python2.7/site-packages/tavern/testutils/pytesthook/item.py:47: FutureWarning: Tavern will drop support for Python 2 in a future release, please switch to using Python 3 (see https://docs.pytest.org/en/latest/py27-py34-deprecation.html)
+    FutureWarning,
+
+-- Docs: https://docs.pytest.org/en/latest/warnings.html
+===================== 1 failed, 1 warnings in 1.10 seconds =====================
+============================= test session starts ==============================
+platform linux2 -- Python 2.7.17, pytest-4.5.0, py-1.8.1, pluggy-0.13.1
+rootdir: /mnt/c/Users/AR-LEGION-LAPTOP/Documents/GitHub/Reddit_Clone
+plugins: tavern-0.34.0
+collected 1 item
+
+test_reddit_clone.tavern.yaml F                                          [100%]
+
+=================================== FAILURES ===================================
+_ /mnt/c/Users/AR-LEGION-LAPTOP/Documents/GitHub/Reddit_Clone/test_reddit_clone.tavern.yaml::Testing the requirments of Reddit_Clone.py _
+
+cls = <class '_pytest.runner.CallInfo'>
+func = <function <lambda> at 0x7fcf958e6d50>, when = 'call'
+reraise = (<class '_pytest.outcomes.Exit'>, <type 'exceptions.KeyboardInterrupt'>)
+
+    @classmethod
+    def from_call(cls, func, when, reraise=None):
+        #: context of invocation: one of "setup", "call",
+        #: "teardown", "memocollect"
+        start = time()
+        excinfo = None
+        try:
+>           result = func()
+
+/home/ar/.local/lib/python2.7/site-packages/_pytest/runner.py:225: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>       lambda: ihook(item=item, **kwds), when=when, reraise=reraise
+    )
+
+/home/ar/.local/lib/python2.7/site-packages/_pytest/runner.py:197: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_HookCaller 'pytest_runtest_call'>, args = ()
+kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+notincall = set([])
+
+    def __call__(self, *args, **kwargs):
+        if args:
+            raise TypeError("hook calling supports only keyword arguments")
+        assert not self.is_historic()
+        if self.spec and self.spec.argnames:
+            notincall = (
+                set(self.spec.argnames) - set(["__multicall__"]) - set(kwargs.keys())
+            )
+            if notincall:
+                warnings.warn(
+                    "Argument(s) {} which are declared in the hookspec "
+                    "can not be found in this hook call".format(tuple(notincall)),
+                    stacklevel=2,
+                )
+>       return self._hookexec(self, self.get_hookimpls(), kwargs)
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/hooks.py:286: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_pytest.config.PytestPluginManager object at 0x7fcf99a9ba90>
+hook = <_HookCaller 'pytest_runtest_call'>
+methods = [<HookImpl plugin_name='runner', plugin=<module '_pytest.runner' from '/home/ar/.local/lib/python2.7/site-packages/_py..._Clone.py>>>, <HookImpl plugin_name='logging-plugin', plugin=<_pytest.logging.LoggingPlugin object at 0x7fcf95b86150>>]
+kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+
+    def _hookexec(self, hook, methods, kwargs):
+        # called from all hookcaller instances.
+        # enable_tracing will set its own wrapping function at self._inner_hookexec
+>       return self._inner_hookexec(hook, methods, kwargs)
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/manager.py:93: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+hook = <_HookCaller 'pytest_runtest_call'>
+methods = [<HookImpl plugin_name='runner', plugin=<module '_pytest.runner' from '/home/ar/.local/lib/python2.7/site-packages/_py..._Clone.py>>>, <HookImpl plugin_name='logging-plugin', plugin=<_pytest.logging.LoggingPlugin object at 0x7fcf95b86150>>]
+kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+
+    self._inner_hookexec = lambda hook, methods, kwargs: hook.multicall(
+        methods,
+        kwargs,
+>       firstresult=hook.spec.opts.get("firstresult") if hook.spec else False,
+    )
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/manager.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+hook_impls = [<HookImpl plugin_name='runner', plugin=<module '_pytest.runner' from '/home/ar/.local/lib/python2.7/site-packages/_py..._Clone.py>>>, <HookImpl plugin_name='logging-plugin', plugin=<_pytest.logging.LoggingPlugin object at 0x7fcf95b86150>>]
+caller_kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+firstresult = False
+
+    def _multicall(hook_impls, caller_kwargs, firstresult=False):
+        """Execute a call into multiple python functions/methods and return the
+        result(s).
+    
+        ``caller_kwargs`` comes from _HookCaller.__call__().
+        """
+        __tracebackhide__ = True
+        results = []
+        excinfo = None
+        try:  # run impl and wrapper setup functions in a loop
+            teardowns = []
+            try:
+                for hook_impl in reversed(hook_impls):
+                    try:
+                        args = [caller_kwargs[argname] for argname in hook_impl.argnames]
+                    except KeyError:
+                        for argname in hook_impl.argnames:
+                            if argname not in caller_kwargs:
+                                raise HookCallError(
+                                    "hook call must provide argument %r" % (argname,)
+                                )
+    
+                    if hook_impl.hookwrapper:
+                        try:
+                            gen = hook_impl.function(*args)
+                            next(gen)  # first yield
+                            teardowns.append(gen)
+                        except StopIteration:
+                            _raise_wrapfail(gen, "did not yield")
+                    else:
+                        res = hook_impl.function(*args)
+                        if res is not None:
+                            results.append(res)
+                            if firstresult:  # halt further impl calls
+                                break
+            except BaseException:
+                excinfo = sys.exc_info()
+        finally:
+            if firstresult:  # first result hooks return a single value
+                outcome = _Result(results[0] if results else None, excinfo)
+            else:
+                outcome = _Result(results, excinfo)
+    
+            # run all wrapper post-yield blocks
+            for gen in reversed(teardowns):
+                try:
+                    gen.send(outcome)
+                    _raise_wrapfail(gen, "has second yield")
+                except StopIteration:
+                    pass
+    
+>           return outcome.get_result()
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/callers.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pluggy.callers._Result object at 0x7fcf958d3190>
+
+    def get_result(self):
+        """Get the result(s) for this hook call.
+    
+        If the hook was marked as a ``firstresult`` only a single value
+        will be returned otherwise a list of results.
+        """
+        __tracebackhide__ = True
+        if self._excinfo is None:
+            return self._result
+        else:
+            ex = self._excinfo
+            if _py3:
+                raise ex[1].with_traceback(ex[2])
+>           _reraise(*ex)  # noqa
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/callers.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+hook_impls = [<HookImpl plugin_name='runner', plugin=<module '_pytest.runner' from '/home/ar/.local/lib/python2.7/site-packages/_py..._Clone.py>>>, <HookImpl plugin_name='logging-plugin', plugin=<_pytest.logging.LoggingPlugin object at 0x7fcf95b86150>>]
+caller_kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+firstresult = False
+
+    def _multicall(hook_impls, caller_kwargs, firstresult=False):
+        """Execute a call into multiple python functions/methods and return the
+        result(s).
+    
+        ``caller_kwargs`` comes from _HookCaller.__call__().
+        """
+        __tracebackhide__ = True
+        results = []
+        excinfo = None
+        try:  # run impl and wrapper setup functions in a loop
+            teardowns = []
+            try:
+                for hook_impl in reversed(hook_impls):
+                    try:
+                        args = [caller_kwargs[argname] for argname in hook_impl.argnames]
+                    except KeyError:
+                        for argname in hook_impl.argnames:
+                            if argname not in caller_kwargs:
+                                raise HookCallError(
+                                    "hook call must provide argument %r" % (argname,)
+                                )
+    
+                    if hook_impl.hookwrapper:
+                        try:
+                            gen = hook_impl.function(*args)
+                            next(gen)  # first yield
+                            teardowns.append(gen)
+                        except StopIteration:
+                            _raise_wrapfail(gen, "did not yield")
+                    else:
+>                       res = hook_impl.function(*args)
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/callers.py:187: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+item = <YamlItem Testing the requirments of Reddit_Clone.py>
+
+    def pytest_runtest_call(item):
+        _update_current_test_var(item, "call")
+        sys.last_type, sys.last_value, sys.last_traceback = (None, None, None)
+        try:
+>           item.runtest()
+
+/home/ar/.local/lib/python2.7/site-packages/_pytest/runner.py:122: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <YamlItem Testing the requirments of Reddit_Clone.py>
+
+    def runtest(self):
+        self.global_cfg = load_global_cfg(self.config)
+    
+        self.global_cfg.setdefault("variables", {})
+    
+        load_plugins(self.global_cfg)
+    
+        self.global_cfg["tavern_internal"] = {"pytest_hook_caller": self.config.hook}
+    
+        # INTERNAL
+        # NOTE - now that we can 'mark' tests, we could use pytest.mark.xfail
+        # instead. This doesn't differentiate between an error in verification
+        # and an error when running the test though.
+        xfail = self.spec.get("_xfail", False)
+    
+        try:
+            fixture_values = self._load_fixture_values()
+            self.global_cfg["variables"].update(fixture_values)
+    
+            call_hook(
+                self.global_cfg,
+                "pytest_tavern_beta_before_every_test_run",
+                test_dict=self.spec,
+                variables=self.global_cfg["variables"],
+            )
+    
+>           verify_tests(self.spec)
+
+/home/ar/.local/lib/python2.7/site-packages/tavern/testutils/pytesthook/item.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+test_spec = {'stages': [{'request': {'url': '127.0.0.1:5000/r/all', 'method': 'GET'}, 'nam..._ID': '9000,'}]}}}], 'test_name': 'Testing the requirments of Reddit_Clone.py'}
+with_plugins = True
+
+    def verify_tests(test_spec, with_plugins=True):
+        """Verify that a specific test block is correct
+    
+        Todo:
+            Load schema file once. Requires some caching of the file
+    
+        Args:
+            test_spec (dict): Test in dictionary form
+    
+        Raises:
+            BadSchemaError: Schema did not match
+        """
+        here = os.path.dirname(os.path.abspath(__file__))
+    
+        schema_filename = os.path.join(here, "tests.schema.yaml")
+        schema = load_schema_file(schema_filename, with_plugins)
+    
+>       verify_generic(test_spec, schema)
+
+/home/ar/.local/lib/python2.7/site-packages/tavern/schemas/files.py:153: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+to_verify = {'stages': [{'request': {'url': '127.0.0.1:5000/r/all', 'method': 'GET'}, 'nam..._ID': '9000,'}]}}}], 'test_name': 'Testing the requirments of Reddit_Clone.py'}
+schema = {'schema;stage': {'required': True, 'type': 'map', 'mapping': {'mqtt_response'...'func': 'validate_request_json'}, 'type': 'map', 'desc': 'Matches test blocks'}
+
+    def verify_generic(to_verify, schema):
+        """Verify a generic file against a given schema
+    
+        Args:
+            to_verify (dict): Filename of source tests to check
+            schema (dict): Schema to verify against
+    
+        Raises:
+            BadSchemaError: Schema did not match
+        """
+        logger.debug("Verifying %s against %s", to_verify, schema)
+    
+        here = os.path.dirname(os.path.abspath(__file__))
+        extension_module_filename = os.path.join(here, "extensions.py")
+    
+        verifier = core.Core(
+            source_data=to_verify,
+            schema_data=schema,
+            extensions=[extension_module_filename],
+        )
+    
+        try:
+            verifier.validate()
+        except pykwalify.errors.PyKwalifyException as e:
+            logger.exception("Error validating %s", to_verify)
+>           raise_from(BadSchemaError(), e)
+
+/home/ar/.local/lib/python2.7/site-packages/tavern/schemas/files.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+exc = BadSchemaError()
+cause = SchemaError(msg='Schema validation failed:
+ - Key 'json' does not match any re...ned. Path: '/stages/0'.
+ - Key 'response' was not defined. Path: '/stages/0'.')
+
+    def raise_from(exc, cause):
+        """
+        Equivalent to:
+    
+            raise EXCEPTION from CAUSE
+    
+        on Python 3. (See PEP 3134).
+        """
+        # Is either arg an exception class (e.g. IndexError) rather than
+        # instance (e.g. IndexError('my message here')? If so, pass the
+        # name of the class undisturbed through to "raise ... from ...".
+        if isinstance(exc, type) and issubclass(exc, Exception):
+            e = exc()
+            # exc = exc.__name__
+            # execstr = "e = " + _repr_strip(exc) + "()"
+            # myglobals, mylocals = _get_caller_globals_and_locals()
+            # exec(execstr, myglobals, mylocals)
+        else:
+            e = exc
+        e.__suppress_context__ = False
+        if isinstance(cause, type) and issubclass(cause, Exception):
+            e.__cause__ = cause()
+            e.__cause__.__traceback__ = sys.exc_info()[2]
+            e.__suppress_context__ = True
+        elif cause is None:
+            e.__cause__ = None
+            e.__suppress_context__ = True
+        elif isinstance(cause, BaseException):
+            e.__cause__ = cause
+            object.__setattr__(e.__cause__,  '__traceback__', sys.exc_info()[2])
+            e.__suppress_context__ = True
+        else:
+            raise TypeError("exception causes must derive from BaseException")
+        e.__context__ = sys.exc_info()[1]
+>       raise e
+E       BadSchemaError
+
+/home/ar/.local/lib/python2.7/site-packages/future/utils/__init__.py:483: BadSchemaError
+------------------------------ Captured log call -------------------------------
+ERROR    pykwalify.core:core.py:162 validation.invalid
+ERROR    pykwalify.core:core.py:163  --- All found errors ---
+ERROR    pykwalify.core:core.py:164 [u"Key 'json' does not match any regex 'headers|redirect_query_params'. Path: '/stages/0/response'", u"Cannot find required key 'type'. Path: '/stages/0'", u"Cannot find required key 'id'. Path: '/stages/0'", u"Key 'request' was not defined. Path: '/stages/0'", u"Key 'name' was not defined. Path: '/stages/0'", u"Key 'response' was not defined. Path: '/stages/0'"]
+ERROR    tavern.schemas.files:files.py:109 Error validating {'stages': [{'request': {'url': '127.0.0.1:5000/r/all', 'method': 'GET'}, 'name': 'Get all posts sorted by KARMA', 'response': {'status_code': 200, 'json': {'posts': [{'owner_name': 'Mike', 'post_body': 'BC Raphtalia is best waifu', 'post_title': 'Why Sheild Hero is good?', 'downvotes': 1, 'post_id': 787, 'comm_name': 'weebs', 'karma': 4, 'date': '2020-03-08 01:54:47.039908', 'upvotes': 5, 'Owner_ID': '1,'}, {'owner_name': 'Just some guy', 'post_body': 'the original COD:MW is still alot better than the reboot.', 'post_title': 'Good taste', 'downvotes': 1, 'post_id': 1200, 'comm_name': 'gaming', 'karma': 2, 'date': '2020-03-08 02:01:35.184508', 'upvotes': 3, 'Owner_ID': '9000,'}]}}}], 'test_name': 'Testing the requirments of Reddit_Clone.py'}
+Traceback (most recent call last):
+  File "/home/ar/.local/lib/python2.7/site-packages/tavern/schemas/files.py", line 107, in verify_generic
+    verifier.validate()
+  File "/home/ar/.local/lib/python2.7/site-packages/pykwalify/core.py", line 167, in validate
+    error_msg=u'.\n - '.join(self.validation_errors)))
+SchemaError: <SchemaError: error code 2: Schema validation failed:
+ - Key 'json' does not match any regex 'headers|redirect_query_params'. Path: '/stages/0/response'.
+ - Cannot find required key 'type'. Path: '/stages/0'.
+ - Cannot find required key 'id'. Path: '/stages/0'.
+ - Key 'request' was not defined. Path: '/stages/0'.
+ - Key 'name' was not defined. Path: '/stages/0'.
+ - Key 'response' was not defined. Path: '/stages/0'.: Path: '/'>
+=============================== warnings summary ===============================
+/home/ar/.local/lib/python2.7/site-packages/tavern/testutils/pytesthook/item.py:47
+  /home/ar/.local/lib/python2.7/site-packages/tavern/testutils/pytesthook/item.py:47: FutureWarning: Tavern will drop support for Python 2 in a future release, please switch to using Python 3 (see https://docs.pytest.org/en/latest/py27-py34-deprecation.html)
+    FutureWarning,
+
+-- Docs: https://docs.pytest.org/en/latest/warnings.html
+===================== 1 failed, 1 warnings in 1.07 seconds =====================
+============================= test session starts ==============================
+platform linux2 -- Python 2.7.17, pytest-4.5.0, py-1.8.1, pluggy-0.13.1
+rootdir: /mnt/c/Users/AR-LEGION-LAPTOP/Documents/GitHub/Reddit_Clone
+plugins: tavern-0.34.0
+collected 1 item
+
+test_reddit_clone.tavern.yaml F                                          [100%]
+
+=================================== FAILURES ===================================
+_ /mnt/c/Users/AR-LEGION-LAPTOP/Documents/GitHub/Reddit_Clone/test_reddit_clone.tavern.yaml::Testing the requirments of Reddit_Clone.py _
+
+cls = <class '_pytest.runner.CallInfo'>
+func = <function <lambda> at 0x7f87e6ca6d50>, when = 'call'
+reraise = (<class '_pytest.outcomes.Exit'>, <type 'exceptions.KeyboardInterrupt'>)
+
+    @classmethod
+    def from_call(cls, func, when, reraise=None):
+        #: context of invocation: one of "setup", "call",
+        #: "teardown", "memocollect"
+        start = time()
+        excinfo = None
+        try:
+>           result = func()
+
+/home/ar/.local/lib/python2.7/site-packages/_pytest/runner.py:225: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>       lambda: ihook(item=item, **kwds), when=when, reraise=reraise
+    )
+
+/home/ar/.local/lib/python2.7/site-packages/_pytest/runner.py:197: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_HookCaller 'pytest_runtest_call'>, args = ()
+kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+notincall = set([])
+
+    def __call__(self, *args, **kwargs):
+        if args:
+            raise TypeError("hook calling supports only keyword arguments")
+        assert not self.is_historic()
+        if self.spec and self.spec.argnames:
+            notincall = (
+                set(self.spec.argnames) - set(["__multicall__"]) - set(kwargs.keys())
+            )
+            if notincall:
+                warnings.warn(
+                    "Argument(s) {} which are declared in the hookspec "
+                    "can not be found in this hook call".format(tuple(notincall)),
+                    stacklevel=2,
+                )
+>       return self._hookexec(self, self.get_hookimpls(), kwargs)
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/hooks.py:286: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_pytest.config.PytestPluginManager object at 0x7f87eae7ba90>
+hook = <_HookCaller 'pytest_runtest_call'>
+methods = [<HookImpl plugin_name='runner', plugin=<module '_pytest.runner' from '/home/ar/.local/lib/python2.7/site-packages/_py..._Clone.py>>>, <HookImpl plugin_name='logging-plugin', plugin=<_pytest.logging.LoggingPlugin object at 0x7f87e6f46150>>]
+kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+
+    def _hookexec(self, hook, methods, kwargs):
+        # called from all hookcaller instances.
+        # enable_tracing will set its own wrapping function at self._inner_hookexec
+>       return self._inner_hookexec(hook, methods, kwargs)
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/manager.py:93: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+hook = <_HookCaller 'pytest_runtest_call'>
+methods = [<HookImpl plugin_name='runner', plugin=<module '_pytest.runner' from '/home/ar/.local/lib/python2.7/site-packages/_py..._Clone.py>>>, <HookImpl plugin_name='logging-plugin', plugin=<_pytest.logging.LoggingPlugin object at 0x7f87e6f46150>>]
+kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+
+    self._inner_hookexec = lambda hook, methods, kwargs: hook.multicall(
+        methods,
+        kwargs,
+>       firstresult=hook.spec.opts.get("firstresult") if hook.spec else False,
+    )
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/manager.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+hook_impls = [<HookImpl plugin_name='runner', plugin=<module '_pytest.runner' from '/home/ar/.local/lib/python2.7/site-packages/_py..._Clone.py>>>, <HookImpl plugin_name='logging-plugin', plugin=<_pytest.logging.LoggingPlugin object at 0x7f87e6f46150>>]
+caller_kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+firstresult = False
+
+    def _multicall(hook_impls, caller_kwargs, firstresult=False):
+        """Execute a call into multiple python functions/methods and return the
+        result(s).
+    
+        ``caller_kwargs`` comes from _HookCaller.__call__().
+        """
+        __tracebackhide__ = True
+        results = []
+        excinfo = None
+        try:  # run impl and wrapper setup functions in a loop
+            teardowns = []
+            try:
+                for hook_impl in reversed(hook_impls):
+                    try:
+                        args = [caller_kwargs[argname] for argname in hook_impl.argnames]
+                    except KeyError:
+                        for argname in hook_impl.argnames:
+                            if argname not in caller_kwargs:
+                                raise HookCallError(
+                                    "hook call must provide argument %r" % (argname,)
+                                )
+    
+                    if hook_impl.hookwrapper:
+                        try:
+                            gen = hook_impl.function(*args)
+                            next(gen)  # first yield
+                            teardowns.append(gen)
+                        except StopIteration:
+                            _raise_wrapfail(gen, "did not yield")
+                    else:
+                        res = hook_impl.function(*args)
+                        if res is not None:
+                            results.append(res)
+                            if firstresult:  # halt further impl calls
+                                break
+            except BaseException:
+                excinfo = sys.exc_info()
+        finally:
+            if firstresult:  # first result hooks return a single value
+                outcome = _Result(results[0] if results else None, excinfo)
+            else:
+                outcome = _Result(results, excinfo)
+    
+            # run all wrapper post-yield blocks
+            for gen in reversed(teardowns):
+                try:
+                    gen.send(outcome)
+                    _raise_wrapfail(gen, "has second yield")
+                except StopIteration:
+                    pass
+    
+>           return outcome.get_result()
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/callers.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pluggy.callers._Result object at 0x7f87e6c93190>
+
+    def get_result(self):
+        """Get the result(s) for this hook call.
+    
+        If the hook was marked as a ``firstresult`` only a single value
+        will be returned otherwise a list of results.
+        """
+        __tracebackhide__ = True
+        if self._excinfo is None:
+            return self._result
+        else:
+            ex = self._excinfo
+            if _py3:
+                raise ex[1].with_traceback(ex[2])
+>           _reraise(*ex)  # noqa
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/callers.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+hook_impls = [<HookImpl plugin_name='runner', plugin=<module '_pytest.runner' from '/home/ar/.local/lib/python2.7/site-packages/_py..._Clone.py>>>, <HookImpl plugin_name='logging-plugin', plugin=<_pytest.logging.LoggingPlugin object at 0x7f87e6f46150>>]
+caller_kwargs = {'item': <YamlItem Testing the requirments of Reddit_Clone.py>}
+firstresult = False
+
+    def _multicall(hook_impls, caller_kwargs, firstresult=False):
+        """Execute a call into multiple python functions/methods and return the
+        result(s).
+    
+        ``caller_kwargs`` comes from _HookCaller.__call__().
+        """
+        __tracebackhide__ = True
+        results = []
+        excinfo = None
+        try:  # run impl and wrapper setup functions in a loop
+            teardowns = []
+            try:
+                for hook_impl in reversed(hook_impls):
+                    try:
+                        args = [caller_kwargs[argname] for argname in hook_impl.argnames]
+                    except KeyError:
+                        for argname in hook_impl.argnames:
+                            if argname not in caller_kwargs:
+                                raise HookCallError(
+                                    "hook call must provide argument %r" % (argname,)
+                                )
+    
+                    if hook_impl.hookwrapper:
+                        try:
+                            gen = hook_impl.function(*args)
+                            next(gen)  # first yield
+                            teardowns.append(gen)
+                        except StopIteration:
+                            _raise_wrapfail(gen, "did not yield")
+                    else:
+>                       res = hook_impl.function(*args)
+
+/home/ar/.local/lib/python2.7/site-packages/pluggy/callers.py:187: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+item = <YamlItem Testing the requirments of Reddit_Clone.py>
+
+    def pytest_runtest_call(item):
+        _update_current_test_var(item, "call")
+        sys.last_type, sys.last_value, sys.last_traceback = (None, None, None)
+        try:
+>           item.runtest()
+
+/home/ar/.local/lib/python2.7/site-packages/_pytest/runner.py:122: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <YamlItem Testing the requirments of Reddit_Clone.py>
+
+    def runtest(self):
+        self.global_cfg = load_global_cfg(self.config)
+    
+        self.global_cfg.setdefault("variables", {})
+    
+        load_plugins(self.global_cfg)
+    
+        self.global_cfg["tavern_internal"] = {"pytest_hook_caller": self.config.hook}
+    
+        # INTERNAL
+        # NOTE - now that we can 'mark' tests, we could use pytest.mark.xfail
+        # instead. This doesn't differentiate between an error in verification
+        # and an error when running the test though.
+        xfail = self.spec.get("_xfail", False)
+    
+        try:
+            fixture_values = self._load_fixture_values()
+            self.global_cfg["variables"].update(fixture_values)
+    
+            call_hook(
+                self.global_cfg,
+                "pytest_tavern_beta_before_every_test_run",
+                test_dict=self.spec,
+                variables=self.global_cfg["variables"],
+            )
+    
+>           verify_tests(self.spec)
+
+/home/ar/.local/lib/python2.7/site-packages/tavern/testutils/pytesthook/item.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+test_spec = {'stages': [{'request': {'url': '127.0.0.1:5000/r/all', 'method': 'GET'}, 'nam..._ID': '9000,'}]}}}], 'test_name': 'Testing the requirments of Reddit_Clone.py'}
+with_plugins = True
+
+    def verify_tests(test_spec, with_plugins=True):
+        """Verify that a specific test block is correct
+    
+        Todo:
+            Load schema file once. Requires some caching of the file
+    
+        Args:
+            test_spec (dict): Test in dictionary form
+    
+        Raises:
+            BadSchemaError: Schema did not match
+        """
+        here = os.path.dirname(os.path.abspath(__file__))
+    
+        schema_filename = os.path.join(here, "tests.schema.yaml")
+        schema = load_schema_file(schema_filename, with_plugins)
+    
+>       verify_generic(test_spec, schema)
+
+/home/ar/.local/lib/python2.7/site-packages/tavern/schemas/files.py:153: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+to_verify = {'stages': [{'request': {'url': '127.0.0.1:5000/r/all', 'method': 'GET'}, 'nam..._ID': '9000,'}]}}}], 'test_name': 'Testing the requirments of Reddit_Clone.py'}
+schema = {'schema;stage': {'required': True, 'type': 'map', 'mapping': {'mqtt_response'...'func': 'validate_request_json'}, 'type': 'map', 'desc': 'Matches test blocks'}
+
+    def verify_generic(to_verify, schema):
+        """Verify a generic file against a given schema
+    
+        Args:
+            to_verify (dict): Filename of source tests to check
+            schema (dict): Schema to verify against
+    
+        Raises:
+            BadSchemaError: Schema did not match
+        """
+        logger.debug("Verifying %s against %s", to_verify, schema)
+    
+        here = os.path.dirname(os.path.abspath(__file__))
+        extension_module_filename = os.path.join(here, "extensions.py")
+    
+        verifier = core.Core(
+            source_data=to_verify,
+            schema_data=schema,
+            extensions=[extension_module_filename],
+        )
+    
+        try:
+            verifier.validate()
+        except pykwalify.errors.PyKwalifyException as e:
+            logger.exception("Error validating %s", to_verify)
+>           raise_from(BadSchemaError(), e)
+
+/home/ar/.local/lib/python2.7/site-packages/tavern/schemas/files.py:110: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+exc = BadSchemaError()
+cause = SchemaError(msg='Schema validation failed:
+ - Key 'json' does not match any re...ned. Path: '/stages/0'.
+ - Key 'response' was not defined. Path: '/stages/0'.')
+
+    def raise_from(exc, cause):
+        """
+        Equivalent to:
+    
+            raise EXCEPTION from CAUSE
+    
+        on Python 3. (See PEP 3134).
+        """
+        # Is either arg an exception class (e.g. IndexError) rather than
+        # instance (e.g. IndexError('my message here')? If so, pass the
+        # name of the class undisturbed through to "raise ... from ...".
+        if isinstance(exc, type) and issubclass(exc, Exception):
+            e = exc()
+            # exc = exc.__name__
+            # execstr = "e = " + _repr_strip(exc) + "()"
+            # myglobals, mylocals = _get_caller_globals_and_locals()
+            # exec(execstr, myglobals, mylocals)
+        else:
+            e = exc
+        e.__suppress_context__ = False
+        if isinstance(cause, type) and issubclass(cause, Exception):
+            e.__cause__ = cause()
+            e.__cause__.__traceback__ = sys.exc_info()[2]
+            e.__suppress_context__ = True
+        elif cause is None:
+            e.__cause__ = None
+            e.__suppress_context__ = True
+        elif isinstance(cause, BaseException):
+            e.__cause__ = cause
+            object.__setattr__(e.__cause__,  '__traceback__', sys.exc_info()[2])
+            e.__suppress_context__ = True
+        else:
+            raise TypeError("exception causes must derive from BaseException")
+        e.__context__ = sys.exc_info()[1]
+>       raise e
+E       BadSchemaError
+
+/home/ar/.local/lib/python2.7/site-packages/future/utils/__init__.py:483: BadSchemaError
+------------------------------ Captured log call -------------------------------
+ERROR    pykwalify.core:core.py:162 validation.invalid
+ERROR    pykwalify.core:core.py:163  --- All found errors ---
+ERROR    pykwalify.core:core.py:164 [u"Key 'json' does not match any regex 'headers|redirect_query_params'. Path: '/stages/0/response'", u"Cannot find required key 'type'. Path: '/stages/0'", u"Cannot find required key 'id'. Path: '/stages/0'", u"Key 'request' was not defined. Path: '/stages/0'", u"Key 'name' was not defined. Path: '/stages/0'", u"Key 'response' was not defined. Path: '/stages/0'"]
+ERROR    tavern.schemas.files:files.py:109 Error validating {'stages': [{'request': {'url': '127.0.0.1:5000/r/all', 'method': 'GET'}, 'name': 'Get all posts sorted by KARMA', 'response': {'status_code': 200, 'json': {'posts': [{'owner_name': 'Mike', 'post_body': 'BC Raphtalia is best waifu', 'post_title': 'Why Sheild Hero is good?', 'downvotes': 1, 'post_id': 787, 'comm_name': 'weebs', 'karma': 4, 'date': '2020-03-08 01:54:47.039908', 'upvotes': 5, 'Owner_ID': '1,'}, {'owner_name': 'Just some guy', 'post_body': 'the original COD:MW is still alot better than the reboot.', 'post_title': 'Good taste', 'downvotes': 1, 'post_id': 1200, 'comm_name': 'gaming', 'karma': 2, 'date': '2020-03-08 02:01:35.184508', 'upvotes': 3, 'Owner_ID': '9000,'}]}}}], 'test_name': 'Testing the requirments of Reddit_Clone.py'}
+Traceback (most recent call last):
+  File "/home/ar/.local/lib/python2.7/site-packages/tavern/schemas/files.py", line 107, in verify_generic
+    verifier.validate()
+  File "/home/ar/.local/lib/python2.7/site-packages/pykwalify/core.py", line 167, in validate
+    error_msg=u'.\n - '.join(self.validation_errors)))
+SchemaError: <SchemaError: error code 2: Schema validation failed:
+ - Key 'json' does not match any regex 'headers|redirect_query_params'. Path: '/stages/0/response'.
+ - Cannot find required key 'type'. Path: '/stages/0'.
+ - Cannot find required key 'id'. Path: '/stages/0'.
+ - Key 'request' was not defined. Path: '/stages/0'.
+ - Key 'name' was not defined. Path: '/stages/0'.
+ - Key 'response' was not defined. Path: '/stages/0'.: Path: '/'>
+=============================== warnings summary ===============================
+/home/ar/.local/lib/python2.7/site-packages/tavern/testutils/pytesthook/item.py:47
+  /home/ar/.local/lib/python2.7/site-packages/tavern/testutils/pytesthook/item.py:47: FutureWarning: Tavern will drop support for Python 2 in a future release, please switch to using Python 3 (see https://docs.pytest.org/en/latest/py27-py34-deprecation.html)
+    FutureWarning,
+
+-- Docs: https://docs.pytest.org/en/latest/warnings.html
+===================== 1 failed, 1 warnings in 1.08 seconds =====================
