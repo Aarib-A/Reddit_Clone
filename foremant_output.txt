@@ -1,0 +1,74 @@
+06:51:23 DYNO.1  | started with pid 6841
+06:51:23 REDIS.1 | started with pid 6842
+06:51:23 VOTE.1  | started with pid 6843
+06:51:23 POST.1  | started with pid 6844
+06:51:23 RSS.1   | started with pid 6848
+06:51:23 REDIS.1 | 6842:C 05 May 06:51:23.595 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+06:51:23 REDIS.1 | 6842:C 05 May 06:51:23.595 # Redis version=4.0.9, bits=64, commit=00000000, modified=0, pid=6842, just started
+06:51:23 REDIS.1 | 6842:C 05 May 06:51:23.595 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+06:51:23 REDIS.1 | 6842:M 05 May 06:51:23.596 * Increased maximum number of open files to 10032 (it was originally set to 1024).
+06:51:23 REDIS.1 | 6842:M 05 May 06:51:23.597 * Running mode=standalone, port=6379.
+06:51:23 REDIS.1 | 6842:M 05 May 06:51:23.597 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+06:51:23 REDIS.1 | 6842:M 05 May 06:51:23.597 # Server initialized
+06:51:23 REDIS.1 | 6842:M 05 May 06:51:23.597 # WARNING overcommit_memory is set to 0! Background save may fail under low memory condition. To fix this issue add 'vm.overcommit_memory = 1' to /etc/sysctl.conf and then reboot or run the command 'sysctl vm.overcommit_memory=1' for this to take effect.
+06:51:23 REDIS.1 | 6842:M 05 May 06:51:23.597 * DB loaded from disk: 0.000 seconds
+06:51:23 REDIS.1 | 6842:M 05 May 06:51:23.597 * Ready to accept connections
+06:51:23 DYNO.1  | Initializing DynamoDB Local with the following configuration:
+06:51:23 DYNO.1  | Port:	8000
+06:51:23 DYNO.1  | InMemory:	false
+06:51:23 DYNO.1  | DbPath:	null
+06:51:23 DYNO.1  | SharedDb:	true
+06:51:23 DYNO.1  | shouldDelayTransientStatuses:	false
+06:51:23 DYNO.1  | CorsParams:	*
+06:51:23 DYNO.1  | 
+06:51:23 RSS.1   | [2020-05-05 06:51:23 +0000] [6848] [INFO] Starting gunicorn 19.7.1
+06:51:23 RSS.1   | [2020-05-05 06:51:23 +0000] [6848] [INFO] Listening at: http://0.0.0.0:8400 (6848)
+06:51:23 RSS.1   | [2020-05-05 06:51:23 +0000] [6848] [INFO] Using worker: sync
+06:51:23 RSS.1   | [2020-05-05 06:51:23 +0000] [6871] [INFO] Booting worker with pid: 6871
+06:51:23 POST.1  | [2020-05-05 06:51:23 -0700] [6844] [INFO] Starting gunicorn 19.7.1
+06:51:23 POST.1  | [2020-05-05 06:51:23 -0700] [6844] [INFO] Listening at: http://0.0.0.0:8300 (6844)
+06:51:23 POST.1  | [2020-05-05 06:51:23 -0700] [6844] [INFO] Using worker: sync
+06:51:23 POST.1  | [2020-05-05 06:51:23 -0700] [6875] [INFO] Booting worker with pid: 6875
+06:51:23 VOTE.1  | [2020-05-05 06:51:23 -0700] [6843] [INFO] Starting gunicorn 19.7.1
+06:51:23 VOTE.1  | [2020-05-05 06:51:23 -0700] [6843] [INFO] Listening at: http://0.0.0.0:8200 (6843)
+06:51:23 VOTE.1  | [2020-05-05 06:51:23 -0700] [6843] [INFO] Using worker: sync
+06:51:23 VOTE.1  | [2020-05-05 06:51:23 -0700] [6877] [INFO] Booting worker with pid: 6877
+06:51:24 RSS.1   | [2020-05-05 06:51:24 +0000] [6871] [ERROR] Exception in worker process
+06:51:24 RSS.1   | Traceback (most recent call last):
+06:51:24 RSS.1   |   File "/usr/lib/python2.7/dist-packages/gunicorn/arbiter.py", line 578, in spawn_worker
+06:51:24 RSS.1   |     worker.init_process()
+06:51:24 RSS.1   |   File "/usr/lib/python2.7/dist-packages/gunicorn/workers/base.py", line 126, in init_process
+06:51:24 RSS.1   |     self.load_wsgi()
+06:51:24 RSS.1   |   File "/usr/lib/python2.7/dist-packages/gunicorn/workers/base.py", line 135, in load_wsgi
+06:51:24 RSS.1   |     self.wsgi = self.app.wsgi()
+06:51:24 RSS.1   |   File "/usr/lib/python2.7/dist-packages/gunicorn/app/base.py", line 67, in wsgi
+06:51:24 RSS.1   |     self.callable = self.load()
+06:51:24 RSS.1   |   File "/usr/lib/python2.7/dist-packages/gunicorn/app/wsgiapp.py", line 65, in load
+06:51:24 RSS.1   |     return self.load_wsgiapp()
+06:51:24 RSS.1   |   File "/usr/lib/python2.7/dist-packages/gunicorn/app/wsgiapp.py", line 52, in load_wsgiapp
+06:51:24 RSS.1   |     return util.import_app(self.app_uri)
+06:51:24 RSS.1   |   File "/usr/lib/python2.7/dist-packages/gunicorn/util.py", line 377, in import_app
+06:51:24 RSS.1   |     __import__(module)
+06:51:24 RSS.1   |   File "/mnt/c/Users/AR-LEGION-LAPTOP/Desktop/SPRING 2020/CPSC 449/Reddit_Clone REBOOT v2/RSSWS.py", line 3, in <module>
+06:51:24 RSS.1   |     from feedgen.feed import FeedGenerator
+06:51:24 RSS.1   | ImportError: No module named feedgen.feed
+06:51:24 RSS.1   | [2020-05-05 06:51:24 +0000] [6871] [INFO] Worker exiting (pid: 6871)
+06:51:24 RSS.1   | [2020-05-05 06:51:24 +0000] [6848] [INFO] Shutting down: Master
+06:51:24 RSS.1   | [2020-05-05 06:51:24 +0000] [6848] [INFO] Reason: Worker failed to boot.
+06:51:24 RSS.1   | exited with code 3
+06:51:24 system  | sending SIGTERM to all processes
+06:51:24 REDIS.1 | 6842:signal-handler (1588686684) Received SIGTERM scheduling shutdown...
+06:51:24 VOTE.1  | [2020-05-05 06:51:24 -0700] [6843] [INFO] Handling signal: term
+06:51:24 POST.1  | [2020-05-05 06:51:24 -0700] [6844] [INFO] Handling signal: term
+06:51:24 VOTE.1  | [2020-05-05 06:51:24 -0700] [6877] [INFO] Worker exiting (pid: 6877)
+06:51:24 POST.1  | [2020-05-05 06:51:24 -0700] [6875] [INFO] Worker exiting (pid: 6875)
+06:51:24 REDIS.1 | 6842:M 05 May 06:51:24.803 # User requested shutdown...
+06:51:24 REDIS.1 | 6842:M 05 May 06:51:24.803 * Saving the final RDB snapshot before exiting.
+06:51:24 VOTE.1  | [2020-05-05 06:51:24 -0700] [6843] [INFO] Shutting down: Master
+06:51:24 POST.1  | [2020-05-05 06:51:24 -0700] [6844] [INFO] Shutting down: Master
+06:51:24 REDIS.1 | 6842:M 05 May 06:51:24.819 * DB saved on disk
+06:51:24 REDIS.1 | 6842:M 05 May 06:51:24.819 # Redis is now ready to exit, bye bye...
+06:51:24 REDIS.1 | exited with code 0
+06:51:25 VOTE.1  | exited with code 0
+06:51:25 DYNO.1  | exited with code 143
+06:51:25 POST.1  | exited with code 0

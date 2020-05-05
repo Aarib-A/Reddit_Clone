@@ -1,7 +1,7 @@
 import requests
 
 
-def _url(port=8000,path='Posts'):
+def _url(port='8000',path='Posts'):
     return 'http://127.0.0.1:8000/{}' 
 #Posts check
 
