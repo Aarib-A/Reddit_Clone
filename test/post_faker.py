@@ -131,6 +131,41 @@ def get_all_ZE_post(Num, community='any'):
 
 #list the N most recent posts to any community
 
+def get_all_ZE_post_id_s(community='any'):
+    dynamodb = boto3.resource('dynamodb', region_name='us-west-2', endpoint_url="http://localhost:8000")
+
+    table = dynamodb.Table('Posts')
+
+    response = table.scan()
+    dates_dictionary = {}
+    list_of_posts = []
+
+    for i in response['Items']:
+        # print(json.dumps(i, cls=DecimalEncoder))
+        data = json.dumps(i, cls=DecimalEncoder)
+        data = json.loads(data)
+
+        if data['community'] == community:
+            list_of_posts.append(data['id'])
+
+    return list_of_posts
+
+    
+    # loop_count = 0
+    # for keys in sorted(dates_dictionary, reverse=True):
+        
+    #     for list in dates_dictionary[keys]:
+            
+    #         # for dicts in list:
+    #             # list_of_posts.append(dicts)
+             
+    #         list_of_posts.append(list)
+
+    # # return list_of_posts
+    # return json.dumps(list_of_posts)
+
+
+
 
 if __name__ == '__main__':
     post_id = 999
@@ -150,9 +185,13 @@ if __name__ == '__main__':
 
     # delete_ze_Post(post_id)
 
-    data = get_all_ZE_post(40)
-    print(data)
-    print('\n\n\n')
-    print(get_all_ZE_post(5, 'WEEBS'))
+    # data = get_all_ZE_post(40)
+    # print(data)
+    # print('\n\n\n')
+    # print(get_all_ZE_post(5, 'WEEBS'))
     # print(json.dumps(data))
+
+
+    result = get_all_ZE_post_id_s(community='cool') 
+    print(result)
     pass

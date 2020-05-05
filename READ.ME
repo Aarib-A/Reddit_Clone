@@ -1,4 +1,90 @@
 To start the server in databases folder use command:
 
-java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb 
+    java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb 
 
+You can test out the database functions using post_faker.py and scan.py in the "test" directory
+
+Commands example:
+Get a Post
+curl -i -X GET  -H "Content-Type: application/json" -d \
+'{"command":"report", "post_id":666}'  http://127.0.0.1:8000/Vote 
+
+Upvote 
+curl -i -X PUT -H "Content-Type: application/json" -d \
+'{"command":"upvote", "post_id":666}'  http://127.0.0.1:8000/Vote
+
+Hot Posts from any community 
+curl -i -X GET  -H "Content-Type: application/json" \
+-d '{"command":"hot"}'  http://127.0.0.1:8000/Vote
+
+Top Posts from any community 
+curl -i -X GET  -H "Content-Type: application/json" -d \
+'{"command":"top"}'  http://127.0.0.1:8000/Vote
+
+Top posts from a particular community 
+curl -i -X GET  -H "Content-Type: application/json" \
+-d '{"command":"community", "comm_name":"cool"}'  http://127.0.0.1:8000/Vote
+
+
+for posts:
+submit posts - 
+curl -i -X POST -H "Content-Type: application/json" -d '{"command":"submit", "post_title":"Link to Aiden Pearce", "id":1776, "post_body":"Could the templars be after him next?", "community":"Assasin's Creed", "user_id":47 }'  http://127.0.0.1:8000/Post
+
+
+curl -i -X POST -H "Content-Type: application/json" -d '{"command":"submit", \
+"date": "2020-05-05T08:47:22.154811", \
+"post_title": "Link to Aiden Pearce", \
+"id": 1776, \
+"post_body": "Could the templars be after him next?", \
+"community": "Assasin's Creed", \
+"user_id": 47 }' \
+ http://127.0.0.1:8000/Post
+
+{'date': '2020-05-05T08:47:22.154811', 'post_title': 'Link to Aiden Pearce', 'id': 1776, 'post_body': 'Could the templars be after him next?', 'community': "Assasin's Creed", 'user_id': 47}
+{
+    "date": "2020-05-05T08:47:22.154811",
+    "post_title": "Link to Aiden Pearce",
+    "id": 1776,
+    "post_body": "Could the templars be after him next?",
+    "community": "Assasin's Creed",
+    "user_id": 47
+}
+
+
+
+CORRECT ONE
+curl --location --request POST 'http://127.0.0.1:8000/Post' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "command": "submit",
+    "post_title": "Link to Aiden Pearce",
+    "post_id": 1776,
+    "post_body": "Could the templars be after him next?",
+    "community": "Assasin'\''s Creed",
+    "user_id": 47
+}'
+
+
+get a certain post -
+curl -i -X GET -H "Content-Type: application/json" \
+-d '{"command":"retrieve", "post_id":1776}'  http://127.0.0.1:8000/Post
+
+
+deleta a post -
+curl -i -X POST -H "Content-Type: application/json" \
+-d '{"command":"delete", "post_id":1776}'  http://127.0.0.1:8000/Post
+
+
+get recent comunity's posts -
+curl -i -X GET -H "Content-Type: application/json" \
+-d '{"command": "community", "community": "cool"}'  http://127.0.0.1:8000/Post
+
+
+get recent all posts -
+curl -i -X GET -H "Content-Type: application/json" \
+-d '{"command":"all"}'  http://127.0.0.1:8000/Post
+
+
+get a certain post -
+curl -i -X GET -H "Content-Type: application/json" \
+-d '{"command":"retrieve", "post_id":1776}'  http://127.0.0.1:8000/Post
