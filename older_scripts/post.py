@@ -28,11 +28,11 @@ def submit(data):
 
 # RETRIEVE COMMUNITY POSTS
 def retrieve_community_posts(community):
-    return jsonify(RSS_friendly(post_faker.get_all_ZE_post(25, community)))
+    return jsonify(post_faker.get_all_ZE_post(20, community))
 
 # RETRIEVE ALL POSTS
 def retrieve_all_posts():
-    return jsonify(RSS_friendly(post_faker.get_all_ZE_post(25)))
+    return jsonify(post_faker.get_all_ZE_post(20))
 
 # RETRIEVE A SINGLE POST 
 def retrieve_post_content(post_id):
@@ -88,6 +88,8 @@ def page_not_found(e):
     return '''<h1>404 NOT FOUND</h1><p>{}</p>'''.format(e), 404
 
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', port=8001)
+    app.run(host='127.0.0.1', port=8000)
+
+
 
 

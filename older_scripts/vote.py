@@ -28,15 +28,8 @@ def get_ups_downs(post_ids):
             pipe.hmget(post, 'upvote', 'downvote')
         return pipe.execute()
 
-# RSS friendly
-def RSS_friendly(posts):
-    whole_dict = {}
-    whole_dict['posts'] = posts
-    return whole_dict
-
 # add upvotes and downvotes to dataset
 def join_tables(posts):
-    print(posts)
     post_ids = []
     for post in posts:
         post_ids.append(post['id'])
@@ -77,11 +70,6 @@ def create_new_vote(post_id):
     status_code = Response(status=201)
     return status_code
 
-# Delete Vote 
-def delete_vote(post_id):
-    post_id = f'post_id:{post_id}'
-    r.delete(post_id)
-
 # DONE, MAY NEED EXTRA SECURITY , CHECK IF KEY EXISTS
 def voting(post_id, is_upvote):
     # Check if post id exists
@@ -120,8 +108,8 @@ def report(post_id):
     if not bool(report):
         status_code = Response(status=404)
         return status_code
-    return jsonify(report)
-    # return report
+    # return jsonify(report)
+    return report
 
 # sort posts 
 def sort_posts(data):
@@ -145,7 +133,6 @@ def top_posts():
 
     top_posts = get_ze_posts_based_on_list(sorted_post_ids)
     top_posts = join_tables(top_posts)
-    top_posts = RSS_friendly(top_posts)
     return jsonify(top_posts)
 
 # Top Community Posts **************
@@ -163,13 +150,10 @@ def top_community_posts(community):
 
     # join the tables 
     sorted_posts = join_tables(sorted_posts)
-
-    # make RSS friendly
-    sorted_posts = RSS_friendly(sorted_posts)
-
     # return sorted posts
     return jsonify(sorted_posts)
      
+
 # Hot Post *************
 def hot_posts():
     posts = get_all_ZE_post(200)
@@ -179,8 +163,12 @@ def hot_posts():
         post['hot'] = hot(int(post['upvote']), int(post['downvote']), dateutil.parser.parse(post['date']))
         
     hot_posts = sorted(posts, key= lambda i: i['hot'], reverse=True)
-    hot_posts = RSS_friendly(hot_posts[:25])
-    return jsonify(hot_posts)
+    return jsonify(hot_posts[:25])
+
+# Delete Vote 
+def delete_vote(post_id):
+    post_id = f'post_id:{post_id}'
+    r.delete(post_id)
 
 @app.route('/Vote', methods=["GET", "PUT", "POST"])
 def Vote():
@@ -217,3 +205,18 @@ def page_not_found(e):
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000)
+    # posts = [
+    #     {
+    #         'id': 666,
+    #         'post_body': 'fewofewroewr'
+    #     },
+    #     {
+    #         'id': 667,
+    #         'post_body': 'balaoiehrowerew'
+    #     }
+    # ]
+    # print(join_tables(posts))
+    # create_new_vote(999)
+    # create_new_vote(1202)
+    # create_new_vote(1313)
+    # create_new_vote(666)

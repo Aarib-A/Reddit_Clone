@@ -2,6 +2,10 @@ To start the server in databases folder use command:
 
     java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb 
 
+    Not sure if this will work:
+    java -Djava.library.path=./'databases/DynamoDBLocal_lib' -jar databases/DynamoDBLocal.jar -sharedDb 
+
+
 You can test out the database functions using post_faker.py and scan.py in the "test" directory
 
 Commands example:
