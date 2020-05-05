@@ -22,10 +22,10 @@ def ERRORFEED(FEED):
 def PostToResponse(post, feed):
 	ent = feed.add_entry()
 	ent.title(post['post_title'])
-	ent.link(href="http://127.0.0.1:8000/r/" +str(post['comm_name'])+"/posts/"+str(post['post_id'])+"/comments")
+	ent.link(href="http://127.0.0.1:8000/r/" +str(post['community'])+"/posts/"+str(post['id'])+"/comments")
 	ent.description(post['post_body'])
-	ent.guid(str(post['post_id']),permalink=False)
-	ent.author(name="user id: " + str(post['post_id']), email="N/A")
+	ent.guid(str(post['id']),permalink=False)
+	ent.author(name="user id: " + str(post['user_id']), email="N/A")
 	ent.pubDate(post['date'] + " +0200")
 
 
@@ -47,7 +47,7 @@ def RSSHome():
 def RSSCommunityRecent(community):
 	fg = GenerateFeed(community);
 	fg.title("25 Recent Posts for: " + community)
-	res = requests.get("http://127.0.0.1:8000/Vote", json={"command": "community", "comm_name":community})
+	res = requests.get("http://127.0.0.1:8000/Vote", json={"command": "recentcommunity", "comm_name":community})
 	if res.ok != True :
 		print('Error: Request Not Found!')
 		return 'ERROR: Request Not Found!'
@@ -111,6 +111,7 @@ def RSSTop():
 @app.route('/RSS/hot')
 def RSSHot():
 	fg = GenerateFeed('all');
+	fg.title("Hot 25 Posts!")
 	res = requests.get("http://127.0.0.1:8000/Vote", json={"command": "hot"})
 	if res.ok != True :
 		print('Error: Request Not Found!')
