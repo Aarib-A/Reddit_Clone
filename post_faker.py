@@ -6,7 +6,8 @@ import decimal
 from botocore.exceptions import ClientError
 # from vote import create_new_vote
 
-# Helper class to convert a DynamoDB item to JSON.
+# Helper class to convert a DynamoDB item to JSON. from
+#https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.Python.03.html
 class DecimalEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, decimal.Decimal):
@@ -47,7 +48,7 @@ def delete_ze_Post(post_id):
     dynamodb = boto3.resource('dynamodb', region_name='us-west-2', endpoint_url="http://localhost:8000")
     table = dynamodb.Table('Posts')
     import vote
-    vote.delete_vote(post_id)
+    vote.delete_vote(post_id) #call upon the module vote.py and uses the function "delet_vote(post_id)"
     print("Starting process of deleting post: {}".format(post_id))
 
     try:
@@ -174,7 +175,7 @@ def get_all_ZE_post_id_s(community='any'):
     table = dynamodb.Table('Posts')
 
     response = table.scan()
-    dates_dictionary = {}
+    # dates_dictionary = {}
     list_of_posts = []
 
     for i in response['Items']:
