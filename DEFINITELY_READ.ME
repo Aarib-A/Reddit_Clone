@@ -1,0 +1,27 @@
+First to make this project work we need to run some scripts.
+
+first, open a terminal and at the directory of "Reddit_Clone REBOOT" run command:
+    java -Djava.library.path=./'databases/DynamoDBLocal_lib' -jar databases/DynamoDBLocal.jar -sharedDb 
+
+
+Then then open another terminal and start redis by using command:
+
+    redis-server
+
+
+
+change directory to "test".
+run the script "initialize.py" to create the table in the databases
+using python3 command
+Then run "dataloader.py" to populate the database
+
+To find what is contained in the database, run the script "scan.py"
+
+Then run in the "Reddit_Clone REBOOT" directory the script "vote_loader.py"
+to initialize the votes.
+
+Now we are ready to start the server, run command:
+    foreman start -p 8000
+
+
+

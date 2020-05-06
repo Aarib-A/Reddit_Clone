@@ -1,0 +1,9 @@
+Hit:1 http://security.ubuntu.com/ubuntu bionic-security InRelease
+Hit:2 http://archive.ubuntu.com/ubuntu bionic InRelease
+Get:3 http://archive.ubuntu.com/ubuntu bionic-updates InRelease [88.7 kB]
+Get:4 http://archive.ubuntu.com/ubuntu bionic-backports InRelease [74.6 kB]
+Fetched 163 kB in 2s (75.2 kB/s)
+Reading package lists...
+Building dependency tree...
+Reading state information...
+49 packages can be upgraded. Run 'apt list --upgradable' to see them.
