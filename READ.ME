@@ -13,21 +13,42 @@ Get a Post
 curl -i -X GET  -H "Content-Type: application/json" -d \
 '{"command":"report", "post_id":666}'  http://127.0.0.1:8000/Vote 
 
+
+curl -i -X GET  -H "Content-Type: application/json" -d \
+'{"command":"report", "post_id":666}'  http://127.0.0.1:8200/Vote 
+
+
 Upvote 
 curl -i -X PUT -H "Content-Type: application/json" -d \
 '{"command":"upvote", "post_id":666}'  http://127.0.0.1:8000/Vote
+
+curl -i -X PUT -H "Content-Type: application/json" -d \
+'{"command":"upvote", "post_id":666}'  http://127.0.0.1:8200/Vote
+
+
 
 Hot Posts from any community 
 curl -i -X GET  -H "Content-Type: application/json" \
 -d '{"command":"hot"}'  http://127.0.0.1:8000/Vote
 
+curl -i -X GET  -H "Content-Type: application/json" \
+-d '{"command":"hot"}'  http://127.0.0.1:8200/Vote
+
+
 Top Posts from any community 
 curl -i -X GET  -H "Content-Type: application/json" -d \
 '{"command":"top"}'  http://127.0.0.1:8000/Vote
 
+curl -i -X GET  -H "Content-Type: application/json" -d \
+'{"command":"top"}'  http://127.0.0.1:8200/Vote
+
+
 Top posts from a particular community 
 curl -i -X GET  -H "Content-Type: application/json" \
 -d '{"command":"community", "comm_name":"cool"}'  http://127.0.0.1:8000/Vote
+
+curl -i -X GET  -H "Content-Type: application/json" \
+-d '{"command":"community", "comm_name":"cool"}'  http://127.0.0.1:8200/Vote
 
 
 for posts:
@@ -44,29 +65,59 @@ curl --location --request POST 'http://127.0.0.1:8000/Post' \
 }'
 
 
+curl --location --request POST 'http://127.0.0.1:8300/Post' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "command": "submit",
+    "post_title": "Link to Aiden Pearce",
+    "post_id": 1776,
+    "post_body": "Could the templars be after him next?",
+    "community": "Assasin'\''s Creed",
+    "user_id": 47
+}'
+
+
+
+
 get a certain post -
 curl -i -X GET -H "Content-Type: application/json" \
 -d '{"command":"retrieve", "post_id":1776}'  http://127.0.0.1:8000/Post
+
+
+curl -i -X GET -H "Content-Type: application/json" \
+-d '{"command":"retrieve", "post_id":1776}'  http://127.0.0.1:8300/Post
 
 
 deleta a post -
 curl -i -X POST -H "Content-Type: application/json" \
 -d '{"command":"delete", "post_id":1776}'  http://127.0.0.1:8000/Post
 
+curl -i -X POST -H "Content-Type: application/json" \
+-d '{"command":"delete", "post_id":1776}'  http://127.0.0.1:8300/Post
+
 
 get recent comunity's posts -
 curl -i -X GET -H "Content-Type: application/json" \
 -d '{"command": "community", "community": "cool"}'  http://127.0.0.1:8000/Post
+
+curl -i -X GET -H "Content-Type: application/json" \
+-d '{"command": "community", "community": "cool"}'  http://127.0.0.1:8300/Post
 
 
 get recent all posts -
 curl -i -X GET -H "Content-Type: application/json" \
 -d '{"command":"all"}'  http://127.0.0.1:8000/Post
 
+curl -i -X GET -H "Content-Type: application/json" \
+-d '{"command":"all"}'  http://127.0.0.1:8300/Post
+
 
 get a certain post -
 curl -i -X GET -H "Content-Type: application/json" \
 -d '{"command":"retrieve", "post_id":1776}'  http://127.0.0.1:8000/Post
+
+curl -i -X GET -H "Content-Type: application/json" \
+-d '{"command":"retrieve", "post_id":1776}'  http://127.0.0.1:8300/Post
 
 
 
