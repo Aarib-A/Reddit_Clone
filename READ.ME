@@ -32,31 +32,6 @@ curl -i -X GET  -H "Content-Type: application/json" \
 
 for posts:
 submit posts - 
-curl -i -X POST -H "Content-Type: application/json" -d '{"command":"submit", "post_title":"Link to Aiden Pearce", "id":1776, "post_body":"Could the templars be after him next?", "community":"Assasin's Creed", "user_id":47 }'  http://127.0.0.1:8000/Post
-
-
-curl -i -X POST -H "Content-Type: application/json" -d '{"command":"submit", \
-"date": "2020-05-05T08:47:22.154811", \
-"post_title": "Link to Aiden Pearce", \
-"id": 1776, \
-"post_body": "Could the templars be after him next?", \
-"community": "Assasin's Creed", \
-"user_id": 47 }' \
- http://127.0.0.1:8000/Post
-
-{'date': '2020-05-05T08:47:22.154811', 'post_title': 'Link to Aiden Pearce', 'id': 1776, 'post_body': 'Could the templars be after him next?', 'community': "Assasin's Creed", 'user_id': 47}
-{
-    "date": "2020-05-05T08:47:22.154811",
-    "post_title": "Link to Aiden Pearce",
-    "id": 1776,
-    "post_body": "Could the templars be after him next?",
-    "community": "Assasin's Creed",
-    "user_id": 47
-}
-
-
-
-CORRECT ONE
 curl --location --request POST 'http://127.0.0.1:8000/Post' \
 --header 'Content-Type: application/json' \
 --data-raw '{
