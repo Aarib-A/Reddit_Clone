@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 import post_faker
-
+import vote
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -22,6 +22,7 @@ def submit(data):
 
     post_faker.create_ze_Post(post_id,user_id, community, date, \
              post_title, post_body)
+    
 
     status_code = Response(status=201)
     return status_code

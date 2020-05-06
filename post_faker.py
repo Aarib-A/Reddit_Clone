@@ -1,4 +1,4 @@
-from __future__ import print_function # Python 2/3 compatibility  #https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.Python.03.html
+from __future__ import print_function # Python 2/3 compatibility inpiration from #https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.Python.03.html
 import boto3
 import json
 import decimal

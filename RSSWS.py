@@ -61,7 +61,8 @@ def RSSCommunityRecent(community):
 
 @app.route('/RSS/recent')
 def RSSRecent():
-	fg = GeneratedFeed('all')
+	fg = GenerateFeed('all');
+	print 
 	fg.title("25 Recent Posts")
 	res = requests.get("http://127.0.0.1:8300/Post", json={"command": "all"})
 	if res.ok != True :

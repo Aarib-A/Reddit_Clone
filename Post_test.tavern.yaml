@@ -1,0 +1,113 @@
+test_name: TESTING POST SERVICE
+
+stages:
+  - name: submit post
+    request:
+      url: http://127.0.0.1:8001/Post
+      method: POST
+      json:
+        command": "submit"
+        post_title: "Link to Aiden Pearce"
+        post_id: 1776
+        post_body: "Could the templars be after him next?"
+        community: "Assasin's Creed"
+        user_id: 47
+    
+    response:
+      status_code: 201
+
+
+  - name: get certain post
+    request:
+      url: http://127.0.0.1:8001/Post
+      method: GET
+      json:
+        command": "retrieve"
+        post_id: 1776
+    
+    response:
+      status_code: 200
+      body:
+        community: "Assasin's Creed"
+        # date: "2020-05-05 23:45:52.774162"
+        id: 1776
+        post_body: "Could the templars be after him next?"
+        post_title: "Link to Aiden Pearce"
+        user_id: 47
+
+
+  - name: DELETE certain post
+    request:
+      url: http://127.0.0.1:8001/Post
+      method: POST
+      json:
+        command": "delete"
+        post_id: 1776
+    
+    response:
+      status_code: 200
+
+
+
+
+  - name: get community's recent posts
+    request:
+      url: http://127.0.0.1:8001/Post
+      method: GET
+      json:
+        command: "community"
+        community: "cool"
+    
+    response:
+      status_code: 200
+      body:
+        "posts": 
+    
+          - community: "cool"
+            date: "2020-04-15T01:09:40.193214"
+            id: 1313
+            post_body: "body2213"
+            post_title: "title__"
+            user_id: 888
+        
+          - community: "cool"
+            date: "2020-04-15T01:08:54.750034"
+            id: 666
+            post_body: "body"
+            post_title: "title"
+            user_id: 888
+
+
+
+  - name: get all recent posts
+    request:
+      url: http://127.0.0.1:8001/Post
+      method: GET
+      json:
+        command: "all"
+    
+    response:
+      status_code: 200
+      body:
+        posts: 
+    
+          - community: "WOW"
+            date: "2020-04-15T02:09:40.193214"
+            id: 1202
+            post_body: "Damn it"
+            post_title: "WTF"
+            user_id: 14
+
+          - community: "cool"
+            date: "2020-04-15T01:09:40.193214"
+            id: 1313
+            post_body: "body2213"
+            post_title: "title__"
+            user_id: 888
+
+          - community: "cool"
+            date: "2020-04-15T01:08:54.750034"
+            id: 666
+            post_body: "body"
+            post_title: "title"
+            user_id: 888
