@@ -116,17 +116,27 @@ curl -i -X GET -H "Content-Type: application/json" \
 
 
 
-*Retrieve Most Recent Posts from any community (XML)*
-``` curl http://127.0.0.1:8400/RSS/recent ```
+*Retrieve Most Recent Posts from any community (XML)* 
+``` 
+curl http://127.0.0.1:8400/RSS/recent 
+```
 
 *Retrieve Most Recent Posts from a particular community (XML)*
-``` curl http://127.0.0.1:8400/RSS/cool/recent ```
+```
+curl http://127.0.0.1:8400/RSS/cool/recent
+```
 
 *Retrieve the Top Scoring Posts from any community (XML)*
-``` curl http://127.0.0.1:8400/RSS/top ```
+``` 
+curl http://127.0.0.1:8400/RSS/top 
+```
 
 *Retrieve the Top Scoring Posts from a particular community (XML)*
-``` curl http://127.0.0.1:8400/RSS/cool/top ```
+``` 
+curl http://127.0.0.1:8400/RSS/cool/top 
+```
 
 *Retrieve the Hot Trending Posts from any community (XML)*
-``` curl http://127.0.0.1:8400/RSS/hot ```
+``` 
+curl http://127.0.0.1:8400/RSS/hot 
+```
