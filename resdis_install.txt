@@ -1,9 +1,0 @@
-Reading package lists...
-Building dependency tree...
-Reading state information...
-python3-hiredis is already the newest version (0.2.0-3).
-redis is already the newest version (5:4.0.9-1ubuntu0.2).
-The following packages were automatically installed and are no longer required:
-  libblas3 libdumbnet1 liblinear3 liblua5.3-0
-Use 'sudo apt autoremove' to remove them.
-0 upgraded, 0 newly installed, 0 to remove and 49 not upgraded.

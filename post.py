@@ -1,4 +1,3 @@
-from database import *
 from flask import Flask, jsonify, request, redirect, url_for, abort, Response
 from datetime import datetime
 

@@ -79,8 +79,14 @@ def create_new_vote(post_id):
 
 # Delete Vote 
 def delete_vote(post_id):
+    post_id = str(post_id)
     post_id = f'post_id:{post_id}'
-    r.delete(post_id)
+    with r.pipeline() as pipe:
+        pipe.multi()
+        pipe.delete(post_id)
+        pipe.srem('posts', post_id)
+        pipe.execute()
+    
 
 # DONE, MAY NEED EXTRA SECURITY , CHECK IF KEY EXISTS
 def voting(post_id, is_upvote):
