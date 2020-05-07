@@ -2,16 +2,34 @@ from database import *
 from flask import Flask, jsonify, request, redirect, url_for, abort, Response
 from datetime import datetime
 
-
-import post_faker
-
-
 app = Flask(__name__)
 app.config["DEBUG"] = True
 
+def create_new_post(conn, cur, task):
+    sql = '''INSERT INTO Posts(id, user_id, community, date, post_title, post_body)
+                    VALUES(?, ?, ?, ?, ?, ?); '''
+    
+    cur.execute(sql, task)
+    conn.commit()
+
+    # Create Votes row
+    create_new_vote(task[0])
+
+    return cur.lastrowid
+
+def create_new_vote(post_id):
+    conn, cur = Connect_to_db('Votes')
+    sql = '''INSERT INTO Votes(post_id, upvotes, downvotes, karma) 
+                    VALUES(?, ?, ?, ?); '''
+    values = (post_id, 1, 0, 1)
+    cur.execute(sql, values)
+    conn.commit()
+    Close_db(conn, cur)
+
 # SUBMIT A POST
 def submit(data):
-    print(data)
+    conn, cur = Connect_to_db('Posts')
+
     post_id = data['post_id']
     user_id = data['user_id']
     community = data['community']
@@ -19,40 +37,72 @@ def submit(data):
     post_title = data['post_title']
     post_body = data['post_body']
 
+    task = (post_id, user_id, community, date, post_title, post_body)
+    try: 
+        with conn:
+            create_new_post(conn=conn, cur=cur, task=task)
 
-    post_faker.create_ze_Post(post_id,user_id, community, date, \
-             post_title, post_body)
+    except sqlite3.IntegrityError as e:
+        Close_db(conn=conn, cur=cur)
+        abort(409)
 
+    Close_db(conn=conn, cur=cur)
     status_code = Response(status=201)
     return status_code
 
 # RETRIEVE COMMUNITY POSTS
 def retrieve_community_posts(community):
-    return jsonify(post_faker.get_all_ZE_post(20, community))
+    conn, cur = Connect_to_db(option='Posts', need_dicts_factory=True)
+    all_community_posts = cur.execute("SELECT * FROM Posts \
+                                                WHERE Posts.community = '{}' \
+                                                ORDER BY date DESC \
+                                                LIMIT 20".format(community)).fetchall()
+
+    Close_db(conn, cur)
+    results = {}
+    results['results'] = all_community_posts
+    return jsonify(results)
 
 # RETRIEVE ALL POSTS
 def retrieve_all_posts():
-    return jsonify(post_faker.get_all_ZE_post(20))
+    conn, cur = Connect_to_db(option='Posts', need_dicts_factory=True)
+    
+    all_posts = cur.execute('SELECT * FROM Posts \
+                             ORDER BY date DESC \
+                             LIMIT 20').fetchall()
+    Close_db(conn, cur)
+
+    results = {}
+    results['posts'] = all_posts
+    return jsonify(results)
 
 # RETRIEVE A SINGLE POST 
 def retrieve_post_content(post_id):
-    # return jsonify(post_faker.get_ze_Post(post_id))
-    return jsonify(post_faker.get_ze_Post_FIXED(post_id))
+    conn, cur = Connect_to_db(option='Posts', need_dicts_factory=True)
 
+    post_content = cur.execute("SELECT * FROM Posts\
+                                WHERE Posts.id = {};".format(post_id)).fetchall()
+    Close_db(conn=conn, cur=cur)
 
+    return jsonify(post_content[0])
 
 # DELETING A POST 
 def delete_post(post_id):
-    post_faker.delete_ze_Post(post_id)
-    
+    post_conn, post_cur = Connect_to_db('Posts')
+    vote_conn, vote_cur = Connect_to_db('Votes')
+
+    post_cur.execute("DELETE FROM Posts WHERE Posts.id={}".format(post_id))
+    post_conn.commit()
+
+    # DELETE FROM VOTES TABLE AS WELL 
+    vote_cur.execute("DELETE FROM Votes WHERE post_id={}".format(post_id))
+    vote_conn.commit()
+
+    Close_db(conn=post_conn, cur=post_cur)
+    Close_db(conn=vote_conn, cur=vote_cur)
+
     status_code = Response(status=200)
     return status_code 
-
-# RSS friendly
-def RSS_friendly(posts):
-    whole_dict = {}
-    whole_dict['posts'] = posts
-    return whole_dict
 
 @app.route('/Post', methods = ["GET", "POST"])
 def Post():
@@ -89,7 +139,6 @@ def page_not_found(e):
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=8000)
-
 
 
 
