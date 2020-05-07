@@ -35,10 +35,14 @@ Able to:
 **How to Run**  
 
 Install Dependencies
-``` ./dependencies.sh ```
+``` 
+./dependencies.sh 
+```
 
 Run Program 
-``` ./run.sh ```
+``` 
+./run.sh 
+```
 
 **Example: How to**
 
