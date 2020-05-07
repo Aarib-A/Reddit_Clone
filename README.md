@@ -3,8 +3,10 @@
 Posting and Voting Microservice
 
 **Preconditional Requirements**:  
-    1) Updatable Bash/Linux Environment
+```
+    1) Updatable Bash/Linux Environment  
     2) Python 2 and 3 installed 
+```
 
 Able to: 
 
